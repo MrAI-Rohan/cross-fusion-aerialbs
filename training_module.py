@@ -31,7 +31,7 @@ class SegmentationModule(pl.LightningModule):
         return self.model(x)
 
     def training_step(self, batch, batch_idx):
-        images, masks = batch
+        images, masks, _, _, _ = batch
 
         preds = self(images)
 
@@ -46,7 +46,7 @@ class SegmentationModule(pl.LightningModule):
         return loss["total_loss"]
 
     def validation_step(self, batch, batch_idx):
-        images, masks = batch
+        images, masks, _, _, _ = batch
 
         preds = self(images)
 
