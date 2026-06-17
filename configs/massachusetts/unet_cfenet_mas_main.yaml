@@ -1,13 +1,13 @@
-# Main experiment for UNet model on Massachusetts dataset
+# Main experiment for UNet model with CFENet on Massachusetts dataset
 
-experiment_name: unet_mas_main
+experiment_name: unet_cfenet_mas_main
 seed: 42
 
 model:
   encoder: swin_t
   timm_name: swin_tiny_patch4_window7_224.ms_in22k_ft_in1k
   decoder: unet
-  cfenet: false
+  cfenet: true
   pretrained: true
 
 data:
