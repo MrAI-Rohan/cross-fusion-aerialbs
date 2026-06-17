@@ -101,7 +101,7 @@ class TiledDataset(Dataset):
             # Triggers if no transform applied
             mask_patch = (mask_patch > 0).astype(np.float32)
         else:
-            mask_patch = (mask_patch > 0).float()
+            mask_patch = (mask_patch > 0).float().unsqueeze(0)  # Add channel dimension for PyTorch
 
         return image_patch, mask_patch, img_idx, y, x
 

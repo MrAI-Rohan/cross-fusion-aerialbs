@@ -1,0 +1,192 @@
+import time
+import wandb
+import torch
+import torch.nn.functional as F
+import pytorch_lightning as pl
+from torchmetrics import BinaryStatScores
+
+from utils import evaluate_metrics
+from loss_function import BCEDiceLoss
+
+from model import build_model
+from optimizer_factory import build_optimizer
+from scheduler_factory import build_scheduler
+from utils import compute_metrics, convert_numerics
+
+class SegmentationModule(pl.LightningModule):
+    def __init__(self, config):
+        super().__init__()
+        self.config = config
+
+        # Save config to checkpoints
+        self.save_hyperparameters(config)
+
+        # Build model
+        self.model = build_model(config)
+
+        self.loss_fn = BCEDiceLoss()
+
+        self.train_stats = BinaryStatScores(threshold=0.5)
+        self.val_stats = BinaryStatScores(threshold=0.5)
+
+    def forward(self, x):
+        return self.model(x)
+
+    def training_step(self, batch, batch_idx):
+        images, masks = batch
+
+        preds = self(images)
+
+        loss = self.loss_fn(preds, masks)
+
+        self.train_stats.update(torch.sigmoid(preds), masks.int())
+
+        self.log("train_loss_bce", loss["bce_loss"], on_step=True, on_epoch=True, prog_bar=True)
+        self.log("train_loss_dice", loss["dice_loss"], on_step=True, on_epoch=True, prog_bar=True)
+        self.log("train_loss_total", loss["total_loss"], on_step=True, on_epoch=True, prog_bar=True)
+
+        return loss["total_loss"]
+
+    def validation_step(self, batch, batch_idx):
+        images, masks = batch
+
+        preds = self(images)
+
+        loss = self.loss_fn(preds, masks)
+
+        self.val_stats.update(torch.sigmoid(preds), masks.int())
+
+        self.log("val_loss_bce", loss["bce_loss"], on_step=False, on_epoch=True, prog_bar=True)
+        self.log("val_loss_dice", loss["dice_loss"], on_step=False, on_epoch=True, prog_bar=True)
+        self.log("val_loss_total", loss["total_loss"], on_step=False, on_epoch=True, prog_bar=True)
+
+        if batch_idx == 0 and self.trainer.is_global_zero:
+            self.log_images(images, masks, preds)
+
+    def configure_optimizers(self):
+        cfenet_enabled = self.config["model"]["cfenet"]
+
+        encoder_lr = float(self.config['training']['encoder_lr'])
+        decoder_lr = float(self.config['training']['decoder_lr'])
+
+        param_groups = [
+            {'params': self.model.encoder.parameters(), 'lr': encoder_lr},
+            {'params': self.model.decoder.parameters(), 'lr': decoder_lr}
+        ]
+
+        if cfenet_enabled:
+            cfenet_lr = float(self.config['training']['cfenet_lr'])
+            param_groups.append({'params': self.model.cfenet.parameters(), 'lr': cfenet_lr})
+
+        optimizer = build_optimizer(param_groups, self.config)
+        scheduler = build_scheduler(optimizer, self.config)
+
+        if scheduler is None:
+            return optimizer
+
+        if self.config["scheduler"]["name"] == "reduce_on_plateau":
+            return {
+                "optimizer": optimizer,
+                "lr_scheduler": {
+                    "scheduler": scheduler,
+                    "monitor": self.config["scheduler"]["monitor"]
+                }
+            }
+        else:
+            return {
+                "optimizer": optimizer,
+                "lr_scheduler": scheduler
+            }
+
+    def on_train_epoch_start(self):
+        self.epoch_start_time = time.time()
+        print(f"\nEpoch {self.current_epoch + 1} started")
+
+    def on_train_epoch_end(self):
+        epoch_time = time.time() - self.epoch_start_time
+        encoder_lr = float(self.optimizers().param_groups[0]["lr"]) # To fix
+        decoder_lr = float(self.optimizers().param_groups[1]["lr"])
+
+        tp, fp, tn, fn, _ = self.train_stats.compute()
+
+        metrics = compute_metrics(tp.float(), fp.float(), fn.float(), tn.float())
+
+        self.log("train_pos_iou", metrics["pos_iou"])
+        self.log("train_neg_iou", metrics["neg_iou"])
+        self.log("train_mean_iou", metrics["mean_iou"])
+        self.log("train_precision", metrics["precision"])
+        self.log("train_recall", metrics["recall"])
+        self.log("train_f1", metrics["f1"])
+        self.log("train_accuracy", metrics["accuracy"])
+        self.log("encoder_lr", encoder_lr)
+        self.log("decoder_lr", decoder_lr)
+
+        if len(self.optimizers().param_groups) > 2:
+            cfenet_lr = float(self.optimizers().param_groups[2]["lr"])
+            self.log("cfenet_lr", cfenet_lr)
+
+        self.train_stats.reset()
+
+        print(f"Epoch {self.current_epoch + 1} finished "
+            f"| Time: {epoch_time:.2f}s "
+            f"| Train BIoU: {metrics['pos_iou']:.4f}")
+
+    def on_validation_epoch_end(self):
+        tp, fp, tn, fn, _ = self.val_stats.compute()
+
+        metrics = compute_metrics(tp.float(), fp.float(), fn.float(), tn.float())
+
+        self.log("val_pos_iou", metrics["pos_iou"])
+        self.log("val_neg_iou", metrics["neg_iou"])
+        self.log("val_mean_iou", metrics["mean_iou"])
+        self.log("val_precision", metrics["precision"])
+        self.log("val_recall", metrics["recall"])
+        self.log("val_f1", metrics["f1"])
+        self.log("val_accuracy", metrics["accuracy"])
+
+        self.val_stats.reset()
+
+        print(f"Val BIoU: {metrics['pos_iou']:.4f}")
+
+    def on_load_checkpoint(self, checkpoint):
+        fixed = convert_numerics(checkpoint)
+        checkpoint.clear()
+        checkpoint.update(fixed)
+
+    def on_before_optimizer_step(self, optimizer):
+        grad_norm = torch.nn.utils.get_total_norm(
+            [p for p in self.model.parameters() if p.grad is not None]
+        )
+        self.log('train_grad_norm', grad_norm, on_step=True, on_epoch=False)
+
+    def log_images(self, images, masks, preds):
+        mean = torch.tensor([0.485, 0.456, 0.406]).view(3, 1, 1)
+        std = torch.tensor([0.229, 0.224, 0.225]).view(3, 1, 1)
+
+        preds = torch.sigmoid(preds)
+        preds = (preds > 0.5).float()
+
+        images = images.cpu()
+        masks = masks.cpu()
+        preds = preds.cpu()
+
+        log_list = []
+
+        for i in range(min(3, images.shape[0])):
+            img = images[i] * std + mean
+            img = img.clamp(0, 1)
+            gt = masks[i]
+            pr = preds[i]
+
+            log_list.append(
+                wandb.Image(
+                    img,
+                    masks={
+                        "ground_truth": {"mask_data": gt.squeeze().numpy()},
+                        "prediction": {"mask_data": pr.squeeze().numpy()}
+                    }
+                )
+            )
+
+        self.logger.experiment.log({"predictions": log_list, "epoch": self.current_epoch})
+

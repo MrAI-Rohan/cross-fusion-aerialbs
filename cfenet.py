@@ -72,30 +72,30 @@ class CFEBlock(nn.Module):
 
 
 class CFENet(nn.Module):
-    def __init__(self, input_channels, W=0.4, growth_factor=32):
+    def __init__(self, encoder_channels, W=0.4, growth_factor=32):
         super().__init__()
 
-        assert len(input_channels) == 4, "CFENet designed for 4 input maps"
+        assert len(encoder_channels) == 4, "CFENet designed for 4 input maps"
 
         self.cfe_high1 = nn.Sequential(
-            CFEBlock(*input_channels[:2], W=W, growth_factor=growth_factor),
-            CFEBlock(*input_channels[:2], W=W, growth_factor=growth_factor),
+            CFEBlock(*encoder_channels[:2], W=W, growth_factor=growth_factor),
+            CFEBlock(*encoder_channels[:2], W=W, growth_factor=growth_factor),
         )
 
         self.cfe_low1 = nn.Sequential(
-            CFEBlock(*input_channels[2:], W=W, growth_factor=growth_factor),
-            CFEBlock(*input_channels[2:], W=W, growth_factor=growth_factor),
+            CFEBlock(*encoder_channels[2:], W=W, growth_factor=growth_factor),
+            CFEBlock(*encoder_channels[2:], W=W, growth_factor=growth_factor),
         )
 
-        self.cfe_mid1 = CFEBlock(*input_channels[1:3], W=W, growth_factor=growth_factor)
+        self.cfe_mid1 = CFEBlock(*encoder_channels[1:3], W=W, growth_factor=growth_factor)
 
-        self.cfe_high2 = CFEBlock(*input_channels[:2], W=W, growth_factor=growth_factor)
-        self.cfe_low2 = CFEBlock(*input_channels[2:], W=W, growth_factor=growth_factor)
+        self.cfe_high2 = CFEBlock(*encoder_channels[:2], W=W, growth_factor=growth_factor)
+        self.cfe_low2 = CFEBlock(*encoder_channels[2:], W=W, growth_factor=growth_factor)
 
-        self.cfe_mid2 = CFEBlock(*input_channels[1:3], W=W, growth_factor=growth_factor)
+        self.cfe_mid2 = CFEBlock(*encoder_channels[1:3], W=W, growth_factor=growth_factor)
 
-        self.cfe_high3 = CFEBlock(*input_channels[:2], W=W, growth_factor=growth_factor)
-        self.cfe_low3 = CFEBlock(*input_channels[2:], W=W, growth_factor=growth_factor)
+        self.cfe_high3 = CFEBlock(*encoder_channels[:2], W=W, growth_factor=growth_factor)
+        self.cfe_low3 = CFEBlock(*encoder_channels[2:], W=W, growth_factor=growth_factor)
 
         self.W = W
 

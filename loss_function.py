@@ -30,7 +30,11 @@ class BCEDiceLoss(nn.Module):
         probs = torch.sigmoid(preds)
         dice_loss = self.dice(probs, targets)
 
-        return bce_loss + dice_loss
+        return {
+            "bce_loss": bce_loss,
+            "dice_loss": dice_loss,
+            "total_loss": bce_loss + dice_loss
+        }
     
 def get_loss_function(config):
     if config["loss"]["name"] == "bce_dice":
