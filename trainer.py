@@ -67,8 +67,8 @@ def main(params=None):
     best_checkpoint = ModelCheckpoint(
         dirpath=checkpoint_dir,
         filename=f"{experiment_name}_best",
-        monitor=config["scheduler"]["monitor"],
-        mode=config["scheduler"]["mode"],
+        monitor=config["checkpoint"]["monitor"],
+        mode=config["checkpoint"]["mode"],
         save_top_k=1
     )
 

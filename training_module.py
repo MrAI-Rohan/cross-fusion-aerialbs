@@ -3,7 +3,7 @@ import wandb
 import torch
 import torch.nn.functional as F
 import pytorch_lightning as pl
-from torchmetrics import BinaryStatScores
+from torchmetrics.classification import BinaryStatScores
 
 from utils import evaluate_metrics
 from loss_function import BCEDiceLoss
