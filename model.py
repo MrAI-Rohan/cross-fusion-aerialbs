@@ -1,4 +1,5 @@
 import timm
+import torch.nn as nn
 
 from cfenet import CFENet
 from decoders.unet import SwinUNet
