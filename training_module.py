@@ -5,10 +5,8 @@ import torch.nn.functional as F
 import pytorch_lightning as pl
 from torchmetrics.classification import BinaryStatScores
 
-from utils import evaluate_metrics
-from loss_function import BCEDiceLoss
-
 from model import build_model
+from loss_function import BCEDiceLoss
 from optimizer_factory import build_optimizer
 from scheduler_factory import build_scheduler
 from utils import compute_metrics, convert_numerics
