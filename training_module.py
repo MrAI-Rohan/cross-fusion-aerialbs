@@ -127,7 +127,11 @@ class SegmentationModule(pl.LightningModule):
 
         print(f"Epoch {self.current_epoch + 1} finished "
             f"| Time: {epoch_time:.2f}s "
-            f"| Train BIoU: {metrics['pos_iou']:.4f}")
+            f"| Train BIoU: {metrics['pos_iou']:.4f}"
+            f"| Encoder LR: {encoder_lr:.2e}"
+            f"| Decoder LR: {decoder_lr:.2e}")
+        if len(self.optimizers().param_groups) > 2:
+            print(f"| CFENet LR: {cfenet_lr:.2e}")
 
     def on_validation_epoch_end(self):
         tp, fp, tn, fn, _ = self.val_stats.compute()
