@@ -108,6 +108,9 @@ def main(params=None):
 
     trainer.fit(model, datamodule, ckpt_path=args.resume)
 
+    print(f"Stopped early: {trainer.should_stop}")
+    print(f"Current epoch: {trainer.current_epoch}")
+
 
 if __name__ == "__main__":
     main()
