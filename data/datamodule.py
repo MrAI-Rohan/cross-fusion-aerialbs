@@ -2,8 +2,8 @@
 from torch.utils.data import DataLoader, RandomSampler
 
 from utils import FilterByBR
-from dataset import TiledDataset
-from transforms import build_transforms
+from data.dataset import TiledDataset
+from data.transforms import build_transforms
 
 class BuildingDataModule(pl.LightningDataModule):
     """PyTorch Lightning DataModule for building segmentation datasets.
