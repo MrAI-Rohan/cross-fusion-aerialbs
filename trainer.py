@@ -51,6 +51,10 @@ def main(params=None):
     else:
         tags.append("no_cfenet")
 
+    # Additional tags must be present in a list.
+    if config["tags"]:
+        tags.extend(config["tags"])
+
     # WandB logger
     wandb_logger = WandbLogger(
         project=config["logging"]["project"],
