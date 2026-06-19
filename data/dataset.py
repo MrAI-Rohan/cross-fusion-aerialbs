@@ -3,7 +3,7 @@ import numpy as np
 from torch.utils.data import Dataset
 
 class TiledDataset(Dataset):
-    def __init__(self, h5_path, patch_size, stride=None, transform=None, filter_func=None, use_cache=False):
+    def __init__(self, h5_path, patch_size, stride=None, transform=None, filter_func=None, use_cache=False, indices=None):
         self.h5_path = h5_path
         self.patch_size = patch_size
         self.stride = stride if stride else patch_size//2
@@ -17,6 +17,8 @@ class TiledDataset(Dataset):
         with h5py.File(h5_path, 'r') as f:
             self.n_images = len(f['images'])
             h, w = f['images'].shape[1], f['images'].shape[2]
+        
+        self.indices = set(indices) if indices is not None else range(self.n_images)
 
         self.image_h = h
         self.image_w = w
@@ -44,6 +46,8 @@ class TiledDataset(Dataset):
         padded_w = w + self.pad_w
 
         for img_idx in range(self.n_images):
+            if img_idx not in self.indices:
+                continue
             for y in range(0, padded_h - p + 1, s):
                 for x in range(0, padded_w - p + 1, s):
                     self.patch_index.append((img_idx, y, x))
