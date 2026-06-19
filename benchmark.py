@@ -289,3 +289,8 @@ def main():
         inria_results["overall"] = compute_metrics(**cf)
 
         save_results_to_csv(inria_results, config_name=ckpt_path.stem, csv_path=dest_dir / "inria_benchmark_results.csv")
+
+
+if __name__ == "__main__":
+    main()
+
