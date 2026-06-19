@@ -224,7 +224,7 @@ def main():
     parser.add_argument("--dataset_flags", type=str, default="111", help="Which datasets to evaluate, show with a 3-digit boolean code,"
                         " first digit for WHU Test, second for Massachusetts, third for INRIA. E.g. '110' means evaluate only WHU Test and Massachusetts.")
     parser.add_argument("--stride", type=int, default=None, help="Stride for testing.")
-    parser.add_argument("dest_dir", type=str, help="Directory to save results CSV.")
+    parser.add_argument("--dest_dir", type=str, help="Directory to save results CSV.")
     
     args = parser.parse_args()
 
