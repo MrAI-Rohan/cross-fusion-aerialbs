@@ -247,7 +247,7 @@ def main():
                 "file": "whu_test.h5"
             },
             "Massachusetts": {
-                "file": "massachusetts.h5"
+                "file": "mas_test.h5"
             }
         }
 
@@ -261,23 +261,23 @@ def main():
 
         inria_datasets = {
             "austin": {
-                "file": "inria.h5",
+                "file": "inria_val.h5",
                 "indices": city_indices["austin"]
             },
             "chicago": {
-                "file": "inria.h5",
+                "file": "inria_val.h5",
                 "indices": city_indices["chicago"]
             },
             "kitsap": {
-                "file": "inria.h5",
+                "file": "inria_val.h5",
                 "indices": city_indices["kitsap"]
             },
             "tyrolw": {
-                "file": "inria.h5",
+                "file": "inria_val.h5",
                 "indices": city_indices["tyrol-w"]
             },
             "vienna": {
-                "file": "inria.h5",
+                "file": "inria_val.h5",
                 "indices": city_indices["vienna"]
             }
         }
