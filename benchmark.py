@@ -257,7 +257,7 @@ def main():
         save_results_to_csv(results, config_name=ckpt_path.stem, csv_path=dest_dir / "benchmark_results.csv")
     
     if args.dataset_flags[2] == "1":
-        city_indices = get_inria_city_indices(h5_path / "inria.h5")
+        city_indices = get_inria_city_indices(h5_path / "inria_val.h5")
 
         inria_datasets = {
             "austin": {
