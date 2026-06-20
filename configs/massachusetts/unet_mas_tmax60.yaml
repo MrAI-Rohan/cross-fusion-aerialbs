@@ -1,8 +1,8 @@
-# UNet model with CFENet on WHU dataset on 10k samples per epoch to test training stability and performance.
-# Main
+# U-Net model with Swin-T encoder for Massachusetts dataset, trained with tmax=60 for 100 epochs, using 10k samples per epoch. This configuration is designed to evaluate the model's performance and stability on the Massachusetts dataset.
 
-experiment_name: unet_whu_10k
+experiment_name: unet_mas_tmax60
 seed: 42
+tags: ["cosine_warmup_clamp", "tmax_60"]
 
 model:
   encoder: swin_t
@@ -12,7 +12,7 @@ model:
   pretrained: true
 
 data:
-  dataset: whu
+  dataset: massachusetts
   patch_size: 224
   train_batch_size: 64
   val_batch_size: 128
@@ -46,10 +46,11 @@ optimizer:
     weight_decay: 0.01
 
 scheduler:
-  name: cosine_warmup
+  name: cosine_warmup_clamp
   params:
     warmup_epochs: 5
     min_lr_ratio: 0.01
+    t_max: 60
 
 checkpoint:
   monitor: val_pos_iou
