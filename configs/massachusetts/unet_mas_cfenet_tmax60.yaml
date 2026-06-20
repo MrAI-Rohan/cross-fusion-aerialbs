@@ -1,19 +1,18 @@
-# Main configuration for UNet on WHU dataset without CFENet, using cosine warmup scheduler with t_max of 60 and training for 10k samples per epoch.
+# Massachusetts UNet with CFENet and cosine warmup clamp scheduler with t_max=60.
 
-experiment_name: unet_whu_cfenet_main
+experiment_name: unet_mas_cfenet_tmax60
 seed: 42
-num_workers: 6
 tags: ["cosine_warmup_clamp", "tmax_60"]
 
 model:
   encoder: swin_t
   timm_name: swin_tiny_patch4_window7_224.ms_in22k_ft_in1k
   decoder: unet
-  cfenet: false
+  cfenet: true
   pretrained: true
 
 data:
-  dataset: whu
+  dataset: massachusetts
   patch_size: 224
   train_batch_size: 64
   val_batch_size: 128
