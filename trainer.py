@@ -108,6 +108,7 @@ def main(params=None):
         enable_progress_bar=config["training"]["progress_bar"],
         gradient_clip_val=config["training"].get("gradient_clip_val", 1.0),
         deterministic=True,
+        num_sanity_val_steps=0,
     )
 
     trainer.fit(model, datamodule, ckpt_path=args.resume)
