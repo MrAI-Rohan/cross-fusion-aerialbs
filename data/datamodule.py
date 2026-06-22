@@ -55,7 +55,7 @@ class BuildingDataModule(pl.LightningDataModule):
             shuffle=shuffle,
             pin_memory=True,
             persistent_workers=False,
-            prefetch_factor=2,
+            prefetch_factor=2 if self.num_workers > 0 else 0,
             sampler=sampler
         )
 
@@ -67,7 +67,7 @@ class BuildingDataModule(pl.LightningDataModule):
             shuffle=False,
             pin_memory=True,
             persistent_workers=False,
-            prefetch_factor=2
+            prefetch_factor=2 if self.num_workers > 0 else 0
         )
 
     def build_dataset(self,):
