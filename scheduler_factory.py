@@ -98,7 +98,7 @@ def build_scheduler(optimizer, config):
         total_epochs = config["training"]["epochs"]
         warmup_epochs = params.get("warmup_epochs", 5)
         min_lr_ratio = params.get("min_lr_ratio", 0.01)
-        t_max = params.get("t_max", total_epochs)
+        t_max = params.get("t_max", None)
 
         return WarmupCosineClampLR(
             optimizer,
