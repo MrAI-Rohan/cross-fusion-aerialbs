@@ -54,7 +54,7 @@ class BuildingDataModule(pl.LightningDataModule):
             num_workers=self.num_workers,
             shuffle=shuffle,
             pin_memory=True,
-            persistent_workers=True,
+            persistent_workers=False,
             prefetch_factor=2,
             sampler=sampler
         )
@@ -66,7 +66,7 @@ class BuildingDataModule(pl.LightningDataModule):
             num_workers=self.num_workers,
             shuffle=False,
             pin_memory=True,
-            persistent_workers=True,
+            persistent_workers=False,
             prefetch_factor=2
         )
 
