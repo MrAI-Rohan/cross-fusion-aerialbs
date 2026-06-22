@@ -1,3 +1,4 @@
+import torch
 import pytorch_lightning as pl
 from torch.utils.data import DataLoader, RandomSampler
 
@@ -28,6 +29,9 @@ class BuildingDataModule(pl.LightningDataModule):
         self.val_h5 = val_h5
         self.data_cfg = config["data"]
 
+        self.generator = torch.Generator()
+        self.generator.manual_seed(config["seed"])
+
         self.num_workers = self.config.get("num_workers", self.get_num_workers(config))
 
     def setup(self, stage=None):
@@ -39,7 +43,8 @@ class BuildingDataModule(pl.LightningDataModule):
             sampler = RandomSampler(
                 self.train_dataset,
                 replacement=False,
-                num_samples=samples_per_epoch
+                num_samples=samples_per_epoch,
+                generator=self.generator
             )
             shuffle = False
         elif samples_per_epoch is not None and len(self.train_dataset) < samples_per_epoch:
@@ -54,9 +59,10 @@ class BuildingDataModule(pl.LightningDataModule):
             num_workers=self.num_workers,
             shuffle=shuffle,
             pin_memory=True,
-            persistent_workers=False,
+            persistent_workers=True,
             prefetch_factor=2 if self.num_workers > 0 else None,
-            sampler=sampler
+            sampler=sampler,
+            generator=self.generator
         )
 
     def val_dataloader(self):
@@ -66,7 +72,7 @@ class BuildingDataModule(pl.LightningDataModule):
             num_workers=self.num_workers,
             shuffle=False,
             pin_memory=True,
-            persistent_workers=False,
+            persistent_workers=True,
             prefetch_factor=2 if self.num_workers > 0 else None
         )
 
