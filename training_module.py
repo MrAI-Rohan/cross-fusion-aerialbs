@@ -31,7 +31,12 @@ class SegmentationModule(pl.LightningModule):
         return self.model(x)
 
     def training_step(self, batch, batch_idx):
+
+        if batch_idx < 2:
+            imgs, masks, *_ = batch
+            print(f"TRAIN batch {batch_idx} | img mean: {imgs.mean():.6f} std: {imgs.std():.6f} | mask sum: {masks.sum():.0f}")        
         images, masks, _, _, _ = batch
+
 
         preds = self(images)
 
@@ -46,6 +51,13 @@ class SegmentationModule(pl.LightningModule):
         return loss["total_loss"]
 
     def validation_step(self, batch, batch_idx):
+
+        if batch_idx < 2:
+            imgs, masks, *_ = batch
+            with torch.no_grad():
+                preds = torch.sigmoid(self(imgs))
+            print(f"VAL batch {batch_idx} | img mean: {imgs.mean():.6f} std: {imgs.std():.6f} | mask sum: {masks.sum():.0f} | pred mean: {preds.mean():.6f}")
+
         images, masks, _, _, _ = batch
 
         preds = self(images)
