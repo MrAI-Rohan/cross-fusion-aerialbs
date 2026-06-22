@@ -37,6 +37,8 @@ class SegmentationModule(pl.LightningModule):
             print(f"TRAIN batch {batch_idx} | img mean: {imgs.mean():.6f} std: {imgs.std():.6f} | mask sum: {masks.sum():.0f}")        
         images, masks, _, _, _ = batch
 
+        print(torch.rand(5, generator=self.generator))
+
 
         preds = self(images)
 
