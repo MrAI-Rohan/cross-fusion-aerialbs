@@ -59,11 +59,11 @@ class BuildingDataModule(pl.LightningDataModule):
         return DataLoader(
             self.train_dataset,
             batch_size=self.data_cfg["train_batch_size"],
-            num_workers=0,
+            num_workers=self.num_workers,
             shuffle=shuffle,
             pin_memory=True,
-            persistent_workers=False,
-            prefetch_factor=0,
+            persistent_workers=True if self.num_workers > 0 else False,
+            prefetch_factor=2 if self.num_workers > 0 else None,
             sampler=sampler,
             generator=generator
         )
@@ -75,7 +75,7 @@ class BuildingDataModule(pl.LightningDataModule):
             num_workers=self.num_workers,
             shuffle=False,
             pin_memory=True,
-            persistent_workers=True,
+            persistent_workers=True if self.num_workers > 0 else False,
             prefetch_factor=2 if self.num_workers > 0 else None
         )
 
