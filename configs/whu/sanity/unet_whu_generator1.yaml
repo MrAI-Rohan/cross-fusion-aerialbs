@@ -24,8 +24,8 @@ data:
     rotate90: 0.5
     brightness_contrast: 0.3
     gauss_noise: 0.2
-    elastic: 0.2
-    grid_distortion: 0.2
+    # elastic: 0.2
+    # grid_distortion: 0.2
   shuffle: true
 
 training:
