@@ -63,7 +63,7 @@ class BuildingDataModule(pl.LightningDataModule):
             shuffle=shuffle,
             pin_memory=True,
             persistent_workers=False,
-            prefetch_factor=2 if self.num_workers > 0 else None,
+            prefetch_factor=0,
             sampler=sampler,
             generator=generator
         )
