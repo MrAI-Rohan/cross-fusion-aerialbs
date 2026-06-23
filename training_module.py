@@ -27,6 +27,9 @@ class SegmentationModule(pl.LightningModule):
         self.train_stats = BinaryStatScores(threshold=0.5)
         self.val_stats = BinaryStatScores(threshold=0.5)
 
+        self.generator = torch.Generator()
+        self.generator.manual_seed(config["seed"])
+
     def forward(self, x):
         return self.model(x)
 
