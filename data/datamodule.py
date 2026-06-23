@@ -29,22 +29,23 @@ class BuildingDataModule(pl.LightningDataModule):
         self.val_h5 = val_h5
         self.data_cfg = config["data"]
 
-        self.generator = torch.Generator()
-        self.generator.manual_seed(config["seed"])
-
         self.num_workers = self.config.get("num_workers", self.get_num_workers(config))
 
     def setup(self, stage=None):
         self.train_dataset, self.val_dataset = self.build_dataset()
 
     def train_dataloader(self):
+        
+        generator = torch.Generator()
+        generator.manual_seed(self.config["seed"])
+
         samples_per_epoch = self.data_cfg.get("samples_per_epoch", None)
         if samples_per_epoch is not None and len(self.train_dataset) > samples_per_epoch:
             sampler = RandomSampler(
                 self.train_dataset,
                 replacement=False,
                 num_samples=samples_per_epoch,
-                generator=self.generator
+                generator=generator
             )
             shuffle = False
         elif samples_per_epoch is not None and len(self.train_dataset) < samples_per_epoch:
@@ -62,7 +63,7 @@ class BuildingDataModule(pl.LightningDataModule):
             persistent_workers=True,
             prefetch_factor=2 if self.num_workers > 0 else None,
             sampler=sampler,
-            generator=self.generator
+            generator=generator
         )
 
     def val_dataloader(self):
