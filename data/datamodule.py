@@ -2,6 +2,9 @@ import torch
 import pytorch_lightning as pl
 from torch.utils.data import DataLoader, RandomSampler
 
+import random
+import numpy as np
+
 from utils import FilterByBR
 from data.dataset import TiledDataset
 from data.transforms import build_transforms
@@ -65,7 +68,8 @@ class BuildingDataModule(pl.LightningDataModule):
             persistent_workers=True if self.num_workers > 0 else False,
             prefetch_factor=2 if self.num_workers > 0 else None,
             sampler=sampler,
-            generator=generator
+            generator=generator,
+            worker_init_fn=self.worker_init_fn
         )
 
     def val_dataloader(self):
@@ -76,7 +80,8 @@ class BuildingDataModule(pl.LightningDataModule):
             shuffle=False,
             pin_memory=True,
             persistent_workers=True if self.num_workers > 0 else False,
-            prefetch_factor=2 if self.num_workers > 0 else None
+            prefetch_factor=2 if self.num_workers > 0 else None,
+            worker_init_fn=self.worker_init_fn
         )
 
     def build_dataset(self,):
@@ -103,6 +108,11 @@ class BuildingDataModule(pl.LightningDataModule):
 
 
         return train_dataset, val_dataset
+    
+    def worker_init_fn(self, worker_id):
+        worker_seed = torch.initial_seed() % 2**32
+        np.random.seed(worker_seed)
+        random.seed(worker_seed)
 
     def get_num_workers(self, config):
         if config.get("platform", None) == "colab":
