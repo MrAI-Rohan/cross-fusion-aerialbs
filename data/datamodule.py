@@ -48,6 +48,8 @@ class BuildingDataModule(pl.LightningDataModule):
                 generator=generator
             )
             shuffle = False
+
+            print(list(iter(sampler))[:20])
         elif samples_per_epoch is not None and len(self.train_dataset) < samples_per_epoch:
             raise ValueError(f"Samples per epoch {samples_per_epoch} is greater than the dataset size {len(self.train_dataset)}, Case not handled.")
         else:
