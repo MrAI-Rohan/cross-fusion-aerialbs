@@ -48,8 +48,8 @@ class SegmentationModule(pl.LightningModule):
         self.log("train_loss_dice", loss["dice_loss"], on_step=True, on_epoch=True, prog_bar=True)
         self.log("train_loss_total", loss["total_loss"], on_step=True, on_epoch=True, prog_bar=True)
 
-        print("loss")
-        
+        print(loss)
+
         return loss["total_loss"]
 
     def validation_step(self, batch, batch_idx):
