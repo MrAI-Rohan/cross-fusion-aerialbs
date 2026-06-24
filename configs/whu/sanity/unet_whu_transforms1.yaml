@@ -2,7 +2,7 @@
 
 experiment_name: unet_whu_transforms1
 seed: 42
-num_workers: 0
+num_workers: 2
 tags: ["cosine_warmup_clamp", "tmax_60"]
 
 model:
