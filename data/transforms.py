@@ -2,7 +2,7 @@ import albumentations as A
 from albumentations.pytorch import ToTensorV2
 
 
-def build_transforms(data_cfg, mode):
+def build_transforms(data_cfg, mode, seed=42):
     if mode not in ["train", "val"]:
         raise ValueError(f"Invalid mode: {mode}. Must be 'train' or 'val'.")
     
@@ -23,7 +23,7 @@ def build_transforms(data_cfg, mode):
         return A.Compose([
             normalize,
             ToTensorV2()
-        ])
+        ], seed=seed)
 
     transform_map = {
         "hflip": A.HorizontalFlip,
@@ -53,4 +53,4 @@ def build_transforms(data_cfg, mode):
 
     transforms.append(ToTensorV2())
 
-    return A.Compose(transforms)
+    return A.Compose(transforms, seed=seed)
