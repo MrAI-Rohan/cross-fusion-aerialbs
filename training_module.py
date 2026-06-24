@@ -32,9 +32,9 @@ class SegmentationModule(pl.LightningModule):
 
     def training_step(self, batch, batch_idx):
 
-        if batch_idx < 2:
-            imgs, masks, *_ = batch
-            print(f"TRAIN batch {batch_idx} | img mean: {imgs.mean():.6f} std: {imgs.std():.6f} | mask sum: {masks.sum():.0f}")        
+        # if batch_idx < 2:
+        #     imgs, masks, *_ = batch
+        #     print(f"TRAIN batch {batch_idx} | img mean: {imgs.mean():.6f} std: {imgs.std():.6f} | mask sum: {masks.sum():.0f}")        
 
         images, masks, _, _, _ = batch
 
@@ -48,7 +48,7 @@ class SegmentationModule(pl.LightningModule):
         self.log("train_loss_dice", loss["dice_loss"], on_step=True, on_epoch=True, prog_bar=True)
         self.log("train_loss_total", loss["total_loss"], on_step=True, on_epoch=True, prog_bar=True)
 
-        print(loss)
+        # print(loss)
 
         return loss["total_loss"]
 

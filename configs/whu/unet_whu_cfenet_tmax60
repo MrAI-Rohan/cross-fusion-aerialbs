@@ -1,9 +1,9 @@
-# Unet with cfenet with tmax=100 to tune scheduler.
+# Unet with cfenet with tmax=60 to tune scheduler.
 
-experiment_name: unet_whu_cfenet_tmax100
+experiment_name: unet_whu_cfenet_tmax60
 seed: 42
 num_workers: 4
-tags: ["tmax100"]
+tags: ["tmax60"]
 
 model:
   encoder: swin_t
@@ -51,7 +51,7 @@ scheduler:
   params:
     warmup_epochs: 5
     min_lr_ratio: 0.01
-    t_max: 100
+    t_max: 60
 
 checkpoint:
   monitor: val_pos_iou

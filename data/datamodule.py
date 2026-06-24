@@ -90,8 +90,8 @@ class BuildingDataModule(pl.LightningDataModule):
         if dataset_name not in ["whu", "massachusetts", "inria"]:
             raise ValueError(f"Unsupported dataset: {dataset_name}. Available datasets: [whu, massachusetts, inria]")
 
-        train_transform = build_transforms(self.data_cfg, mode="train")
-        val_transform = build_transforms(self.data_cfg, mode="val")
+        train_transform = build_transforms(self.data_cfg, mode="train", seed=self.config["seed"])
+        val_transform = build_transforms(self.data_cfg, mode="val", seed=self.config["seed"])
 
         train_dataset = TiledDataset(h5_path=self.train_h5,
                                     transform=train_transform,
