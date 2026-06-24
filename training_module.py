@@ -27,9 +27,6 @@ class SegmentationModule(pl.LightningModule):
         self.train_stats = BinaryStatScores(threshold=0.5)
         self.val_stats = BinaryStatScores(threshold=0.5)
 
-        self.generator = torch.Generator()
-        self.generator.manual_seed(config["seed"])
-
     def forward(self, x):
         return self.model(x)
 
@@ -38,10 +35,8 @@ class SegmentationModule(pl.LightningModule):
         if batch_idx < 2:
             imgs, masks, *_ = batch
             print(f"TRAIN batch {batch_idx} | img mean: {imgs.mean():.6f} std: {imgs.std():.6f} | mask sum: {masks.sum():.0f}")        
+
         images, masks, _, _, _ = batch
-
-        # print(torch.rand(5, generator=self.generator))
-
 
         preds = self(images)
 
@@ -53,15 +48,17 @@ class SegmentationModule(pl.LightningModule):
         self.log("train_loss_dice", loss["dice_loss"], on_step=True, on_epoch=True, prog_bar=True)
         self.log("train_loss_total", loss["total_loss"], on_step=True, on_epoch=True, prog_bar=True)
 
+        print("loss")
+        
         return loss["total_loss"]
 
     def validation_step(self, batch, batch_idx):
 
-        if batch_idx < 2:
-            imgs, masks, *_ = batch
-            with torch.no_grad():
-                preds = torch.sigmoid(self(imgs))
-            print(f"VAL batch {batch_idx} | img mean: {imgs.mean():.6f} std: {imgs.std():.6f} | mask sum: {masks.sum():.0f} | pred mean: {preds.mean():.6f}")
+        # if batch_idx < 2:
+        #     imgs, masks, *_ = batch
+        #     with torch.no_grad():
+        #         preds = torch.sigmoid(self(imgs))
+            # print(f"VAL batch {batch_idx} | img mean: {imgs.mean():.6f} std: {imgs.std():.6f} | mask sum: {masks.sum():.0f} | pred mean: {preds.mean():.6f}")
 
         images, masks, _, _, _ = batch
 
