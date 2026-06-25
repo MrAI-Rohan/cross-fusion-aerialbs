@@ -1,14 +1,15 @@
-# Massachusetts UNet with CFENet and cosine warmup clamp scheduler with t_max=60.
+# Final unet cfenet run on Massachusetts.
 
-experiment_name: unet_mas_cfenet_tmax60
+experiment_name: unet_mas_final
 seed: 42
-tags: ["cosine_warmup_clamp", "tmax_60"]
+num_workers: 4
+tags: ["final"]
 
 model:
   encoder: swin_t
   timm_name: swin_tiny_patch4_window7_224.ms_in22k_ft_in1k
   decoder: unet
-  cfenet: true
+  cfenet: false
   pretrained: true
 
 data:
@@ -50,7 +51,6 @@ scheduler:
   params:
     warmup_epochs: 5
     min_lr_ratio: 0.01
-    t_max: 60
 
 checkpoint:
   monitor: val_pos_iou

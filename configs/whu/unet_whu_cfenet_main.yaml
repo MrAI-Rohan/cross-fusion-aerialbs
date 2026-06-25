@@ -1,4 +1,5 @@
 # Main configuration for UNet on WHU dataset without CFENet, using cosine warmup scheduler with t_max of 60 and training for 10k samples per epoch.
+# I forgot to set cfenet=true, so this run is identical to the vanilla unet run.
 
 experiment_name: unet_whu_cfenet_main
 seed: 42
