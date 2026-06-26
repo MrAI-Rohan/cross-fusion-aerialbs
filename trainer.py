@@ -107,7 +107,7 @@ def main(params=None):
         log_every_n_steps=10,
         enable_progress_bar=config["training"]["progress_bar"],
         gradient_clip_val=config["training"].get("gradient_clip_val", 1.0),
-        deterministic=True,
+        deterministic="warn",
         num_sanity_val_steps=0,
     )
 
