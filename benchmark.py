@@ -225,6 +225,9 @@ def main():
                         " first digit for WHU Test, second for Massachusetts, third for INRIA. E.g. '110' means evaluate only WHU Test and Massachusetts.")
     parser.add_argument("--stride", type=int, default=None, help="Stride for testing.")
     parser.add_argument("--dest_dir", type=str, help="Directory to save results CSV.")
+    parser.add_argument("--dest_file1", type="str", default="benchmark_results.csv", help="File name to store WHU and Massachusetts benchmarks.")
+    parser.add_argument("--dest_file2", type="str", default="inria_benchmark_results.csv", help="File name to store INRIA benchmarks.")
+
     
     args = parser.parse_args()
 
@@ -254,7 +257,7 @@ def main():
         results = run_benchmark(model, h5_path, dataset_dict, args.patch_size,
                                  args.batch_size, args.stride, args.dataset_flags[:2])
     
-        save_results_to_csv(results, config_name=ckpt_path.stem, csv_path=dest_dir / "benchmark_results.csv")
+        save_results_to_csv(results, config_name=ckpt_path.stem, csv_path=dest_dir / args.dest_file1)
     
     if args.dataset_flags[2] == "1":
         city_indices = get_inria_city_indices(h5_path / "inria_val.h5")
@@ -288,7 +291,7 @@ def main():
         cf = {i: sum([inria_results[j][i] for j in inria_results]) for i in ["tp", "fp", "fn", "tn"]}
         inria_results["overall"] = compute_metrics(**cf)
 
-        save_results_to_csv(inria_results, config_name=ckpt_path.stem, csv_path=dest_dir / "inria_benchmark_results.csv")
+        save_results_to_csv(inria_results, config_name=ckpt_path.stem, csv_path=dest_dir / args.dest_file2)
 
 
 if __name__ == "__main__":
