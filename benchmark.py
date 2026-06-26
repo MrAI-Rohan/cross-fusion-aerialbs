@@ -225,8 +225,8 @@ def main():
                         " first digit for WHU Test, second for Massachusetts, third for INRIA. E.g. '110' means evaluate only WHU Test and Massachusetts.")
     parser.add_argument("--stride", type=int, default=None, help="Stride for testing.")
     parser.add_argument("--dest_dir", type=str, help="Directory to save results CSV.")
-    parser.add_argument("--dest_file1", type="str", default="benchmark_results.csv", help="File name to store WHU and Massachusetts benchmarks.")
-    parser.add_argument("--dest_file2", type="str", default="inria_benchmark_results.csv", help="File name to store INRIA benchmarks.")
+    parser.add_argument("--dest_file1", type=str, default="benchmark_results.csv", help="File name to store WHU and Massachusetts benchmarks.")
+    parser.add_argument("--dest_file2", type=str, default="inria_benchmark_results.csv", help="File name to store INRIA benchmarks.")
 
     
     args = parser.parse_args()
