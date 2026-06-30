@@ -42,6 +42,11 @@ class SegmentationModule(pl.LightningModule):
 
         loss = self.loss_fn(preds, masks)
 
+        # So few bad loss values doesn't poison the whole curve
+        if not torch.isfinite(loss["total_loss"]):
+            print(f"Non-finite training loss at epoch {self.current_epoch}, batch {batch_idx}")
+            return None
+
         self.train_stats.update(torch.sigmoid(preds), masks.int())
 
         self.log("train_loss_bce", loss["bce_loss"], on_step=True, on_epoch=True, prog_bar=True)
@@ -62,9 +67,30 @@ class SegmentationModule(pl.LightningModule):
 
         images, masks, _, _, _ = batch
 
-        preds = self(images)
+        # Overflow only detected for UPerNet yet.
+        if self.config["model"]["cfenet"] and self.config["model"]["decoder"]=="upernet":
+            # Validation in FP32 only for CFENet with UPerNet models
+            with torch.autocast(device_type="cuda", enabled=False):
+                preds = self(images.float())
+                loss = self.loss_fn(preds, masks.float())
+        else:
+            preds = self(images)
+            loss = self.loss_fn(preds, masks)
 
-        loss = self.loss_fn(preds, masks)
+        if not torch.isfinite(preds).all():
+            print(
+                f"Non-finite validation predictions "
+                f"epoch={self.current_epoch} "
+                f"batch={batch_idx}"
+            )
+            return
+        if not torch.isfinite(loss["total_loss"]):
+            print(
+                f"Non-finite validation loss "
+                f"epoch={self.current_epoch} "
+                f"batch={batch_idx}"
+            )
+            return
 
         self.val_stats.update(torch.sigmoid(preds), masks.int())
 
@@ -112,6 +138,8 @@ class SegmentationModule(pl.LightningModule):
 
     def on_train_epoch_start(self):
         self.epoch_start_time = time.time()
+        self.skipped_steps = 0
+        self._prev_scale = None
         print(f"\nEpoch {self.current_epoch + 1} started")
 
     def on_train_epoch_end(self):
@@ -136,6 +164,11 @@ class SegmentationModule(pl.LightningModule):
         if len(self.optimizers().param_groups) > 2:
             cfenet_lr = float(self.optimizers().param_groups[2]["lr"])
             self.log("cfenet_lr", cfenet_lr)
+        
+        # Log number of dismissed batches by scaler
+        scaler = getattr(self.trainer.precision_plugin, "scaler", None)
+        if scaler is not None:
+            self.log('skipped_steps', self.skipped_steps)
 
         self.train_stats.reset()
 
@@ -170,6 +203,18 @@ class SegmentationModule(pl.LightningModule):
         checkpoint.update(fixed)
 
     def on_before_optimizer_step(self, optimizer):
+        # Log scaler deets to inspect gradient magnitudes and dismissed batches if grads explode.
+        scaler = getattr(self.trainer.precision_plugin, "scaler", None)
+
+        if scaler is not None:
+            current_scale = scaler.get_scale()
+            
+            if self._prev_scale is not None and current_scale < self._prev_scale:
+                self.skipped_steps += 1
+            self._prev_scale = current_scale
+
+            self.log('loss_scale', current_scale, on_step=True, on_epoch=False)
+        
         grad_norm = torch.nn.utils.get_total_norm(
             [p for p in self.model.parameters() if p.grad is not None]
         )
