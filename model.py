@@ -6,6 +6,7 @@ import torch.nn as nn
 from cfenet import CFENet
 from decoders.unet import SwinUNet
 from decoders.upernet import SwinUPerNet
+from decoders.deeplabv3plus import SwinDeepLabV3Plus
 
 class SegmentationModel(nn.Module):
     """This class will only work properly if the encoder and decoder work correctly together already.
@@ -56,6 +57,8 @@ def build_model(config):
         decoder = SwinUNet(encoder_channels)
     elif model_cfg["decoder"] == "upernet":
         decoder = SwinUPerNet(encoder_channels)
+    elif model_cfg["decoder"] == "deeplabv3plus":
+        decoder = SwinDeepLabV3Plus(encoder_channels, aspp_index=3, high_res_index=0)
     else:
         raise ValueError("Invalid decoder: {model_cfg['decoder']}, choose from [unet, upernet, deeplabv3plus]")
     
