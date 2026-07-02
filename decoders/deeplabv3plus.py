@@ -102,40 +102,14 @@ class SwinDeepLabV3Plus(nn.Module):
                     nn.Conv2d(128, 1, kernel_size=1)
                 )
 
-    # def forward(self, features):
-    #     aspp_features = self.aspp(features[self.aspp_index])
-    #     aspp_features = self.up(aspp_features)
-
-    #     high_res_features = self.block1(features[self.high_res_index])
-
-    #     concat_features = torch.cat([aspp_features, high_res_features], dim=1)
-        
-    #     decoder_features = self.block2(concat_features)
-    #     logits = self.head(decoder_features)
-    #     return logits
-    
-    def forward(self, features: List[torch.Tensor]) -> torch.Tensor:
-        def mem():
-            return torch.cuda.memory_allocated() / 1024**3
-
-        print(f"Start                    | {mem():.2f} GB")
-
+    def forward(self, features):
         aspp_features = self.aspp(features[self.aspp_index])
-        print(f"After ASPP              {aspp_features.shape} | {mem():.2f} GB")
-
         aspp_features = self.up(aspp_features)
-        print(f"After Upsample          {aspp_features.shape} | {mem():.2f} GB")
 
         high_res_features = self.block1(features[self.high_res_index])
-        print(f"After Block1            {high_res_features.shape} | {mem():.2f} GB")
 
         concat_features = torch.cat([aspp_features, high_res_features], dim=1)
-        print(f"After Concat            {concat_features.shape} | {mem():.2f} GB")
-
+        
         decoder_features = self.block2(concat_features)
-        print(f"After Block2            {decoder_features.shape} | {mem():.2f} GB")
-
         logits = self.head(decoder_features)
-        print(f"After Head              {logits.shape} | {mem():.2f} GB")
-
         return logits

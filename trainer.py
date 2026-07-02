@@ -109,6 +109,7 @@ def main(params=None):
         gradient_clip_val=config["training"].get("gradient_clip_val", 1.0),
         deterministic="warn",
         num_sanity_val_steps=0,
+        accumulate_grad_batches=config["training"].get("grad_accumulation", 1),
     )
 
     trainer.fit(model, datamodule, ckpt_path=args.resume)
