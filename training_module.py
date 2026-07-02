@@ -27,8 +27,8 @@ class SegmentationModule(pl.LightningModule):
         self.train_stats = BinaryStatScores(threshold=0.5)
         self.val_stats = BinaryStatScores(threshold=0.5)
 
-    def forward(self, x):
-        return self.model(x)
+    def forward(self, x, decoder_precision=None):
+        return self.model(x, decoder_precision=decoder_precision)
 
     def training_step(self, batch, batch_idx):
 
@@ -38,13 +38,16 @@ class SegmentationModule(pl.LightningModule):
 
         images, masks, _, _, _ = batch
 
-        preds = self(images)
+        fp32 = "fp32" if self.config["training"].get("decoder_force_fp32", False) else None
+        
+        preds = self(images, decoder_precision=fp32)
 
         loss = self.loss_fn(preds, masks)
 
         # So few bad loss values doesn't poison the whole curve
         if not torch.isfinite(loss["total_loss"]):
             print(f"Non-finite training loss at epoch {self.current_epoch}, batch {batch_idx}")
+            self.optimizers().zero_grad()
             return None
 
         self.train_stats.update(torch.sigmoid(preds), masks.int())
@@ -67,15 +70,9 @@ class SegmentationModule(pl.LightningModule):
 
         images, masks, _, _, _ = batch
 
-        # Overflow only detected for UPerNet yet.
-        if self.config["model"]["cfenet"] and self.config["model"]["decoder"]=="upernet":
-            # Validation in FP32 only for CFENet with UPerNet models
-            with torch.autocast(device_type="cuda", enabled=False):
-                preds = self(images.float())
-                loss = self.loss_fn(preds, masks.float())
-        else:
-            preds = self(images)
-            loss = self.loss_fn(preds, masks)
+        # Validation in FP16.
+        preds = self(images)
+        loss = self.loss_fn(preds, masks)
 
         if not torch.isfinite(preds).all():
             print(
@@ -144,7 +141,7 @@ class SegmentationModule(pl.LightningModule):
 
     def on_train_epoch_end(self):
         epoch_time = time.time() - self.epoch_start_time
-        encoder_lr = float(self.optimizers().param_groups[0]["lr"]) # To fix
+        encoder_lr = float(self.optimizers().param_groups[0]["lr"])
         decoder_lr = float(self.optimizers().param_groups[1]["lr"])
 
         tp, fp, tn, fn, _ = self.train_stats.compute()

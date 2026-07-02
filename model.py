@@ -1,3 +1,5 @@
+import torch
+
 import timm
 import torch.nn as nn
 
@@ -22,14 +24,20 @@ class SegmentationModel(nn.Module):
 
         self.cfenet = CFENet(encoder_channels) if cfenet else None
     
-    def forward(self, x):
+    def forward(self, x, decoder_precision=None):
         features = self.encoder(x)
         permuted_features = [f.permute(0, 3, 1, 2) for f in features]
 
         if self.cfenet is not None:
             permuted_features = self.cfenet(permuted_features)
-
-        decoder_output = self.decoder(permuted_features)
+        
+        # To prevent overflow in UPerNet, the decoder is run in FP32 precision if specified.
+        if decoder_precision == "fp32":
+            with torch.autocast(device_type="cuda", enabled=False):
+                features_fp32 = [f.float() for f in permuted_features]
+                decoder_output = self.decoder(features_fp32)
+        else:
+            decoder_output = self.decoder(permuted_features)
     
         return decoder_output
 
@@ -53,6 +61,5 @@ def build_model(config):
     
     if model_cfg["cfenet"] not in [True, False]:
         raise ValueError("cfenet must be a bool")
-    
-    return SegmentationModel(encoder, decoder, model_cfg["cfenet"], encoder_channels)
 
+    return SegmentationModel(encoder, decoder, model_cfg["cfenet"], encoder_channels,)
