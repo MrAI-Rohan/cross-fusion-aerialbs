@@ -50,7 +50,7 @@ class SegmentationModule(pl.LightningModule):
             self.optimizers().zero_grad()
             return None
 
-        self.train_stats.update(torch.sigmoid(preds), masks.int())
+        self.train_stats.update(torch.sigmoid(preds).detach(), masks.int())
 
         self.log("train_loss_bce", loss["bce_loss"], on_step=True, on_epoch=True, prog_bar=True)
         self.log("train_loss_dice", loss["dice_loss"], on_step=True, on_epoch=True, prog_bar=True)
@@ -89,7 +89,7 @@ class SegmentationModule(pl.LightningModule):
             )
             return
 
-        self.val_stats.update(torch.sigmoid(preds), masks.int())
+        self.val_stats.update(torch.sigmoid(preds).detach(), masks.int())
 
         self.log("val_loss_bce", loss["bce_loss"], on_step=False, on_epoch=True, prog_bar=True)
         self.log("val_loss_dice", loss["dice_loss"], on_step=False, on_epoch=True, prog_bar=True)
