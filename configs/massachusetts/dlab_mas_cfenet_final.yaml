@@ -1,6 +1,6 @@
-# Vanilla DeepLabV3+ with SwinT on WHU.
+# Vanilla DeepLabV3+ and CFENet with SwinT on Massachusetts.
 
-experiment_name: dlab_whu_main
+experiment_name: dlab_mas_cfenet_main-3
 seed: 42
 num_workers: 4
 
@@ -8,14 +8,14 @@ model:
   encoder: swin_t
   timm_name: swin_tiny_patch4_window7_224.ms_in22k_ft_in1k
   decoder: deeplabv3plus
-  cfenet: false
+  cfenet: true
   pretrained: true
 
 data:
   dataset: whu
   patch_size: 224
   train_batch_size: 32
-  val_batch_size: 64
+  val_batch_size: 32
   samples_per_epoch: 10000
   train_transform:
     hflip: 0.5
