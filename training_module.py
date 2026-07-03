@@ -58,9 +58,9 @@ class SegmentationModule(pl.LightningModule):
 
         # print(loss)
 
-        if batch_idx % 15 == 0:
-            print(f"step {batch_idx}: {torch.cuda.memory_allocated()/1e9:.2f} GB allocated, "
-                f"{torch.cuda.max_memory_allocated()/1e9:.2f} GB peak")
+        # if batch_idx % 15 == 0:
+        #     print(f"step {batch_idx}: {torch.cuda.memory_allocated()/1e9:.2f} GB allocated, "
+        #         f"{torch.cuda.max_memory_allocated()/1e9:.2f} GB peak")
 
         return loss["total_loss"]
 
