@@ -45,6 +45,7 @@ def run_benchmark(model, h5_root, dataset_dict, patch_size, batch_size, stride, 
             counts["fn"],
             counts["tn"]
         )
+        results[name]["threshold"] = threshold
 
         del loader
         torch.cuda.empty_cache()
