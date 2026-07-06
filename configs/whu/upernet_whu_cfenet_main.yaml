@@ -36,7 +36,6 @@ training:
   cfenet_lr: 6e-4
   progress_bar: false
   decoder_force_fp32: true
-  grad_accumulation: 2
 
 early_stopping:
   monitor: val_pos_iou

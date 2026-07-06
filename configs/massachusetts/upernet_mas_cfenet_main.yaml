@@ -1,4 +1,4 @@
-# UPerNet and CFENet with SwinT on Massachusetts.
+# UPerNet and CFENet with SwinT on Massachusetts. Failure by overflow.
 
 experiment_name: upernet_mas_cfenet_main
 seed: 42

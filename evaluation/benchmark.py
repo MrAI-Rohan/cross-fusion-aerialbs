@@ -1,131 +1,14 @@
 import os
 import gc
 import h5py
+import torch
 import argparse
 import pandas as pd
 from pathlib import Path
-from tqdm.auto import tqdm
 from datetime import datetime
-import time
 
-import torch
-from torch.utils.data import DataLoader
-
-from utils import compute_metrics
-from data.dataset import TiledDataset
-from data.transforms import build_transforms
-from training_module import SegmentationModule
-
-
-def load_data(h5_path, patch_size,  batch_size, indices=None, stride=None, transform=None, num_workers=2):
-    dataset = TiledDataset(h5_path, patch_size=patch_size, transform=transform,
-                            use_cache=True, stride=stride, indices=indices)
-    dataloader = DataLoader(dataset, batch_size=batch_size,
-                            num_workers=num_workers, pin_memory=True,
-                            prefetch_factor=4, persistent_workers=True)
-    return dataloader
-
-def load_model(ckpt_path, device="cuda"):
-    model = SegmentationModule.load_from_checkpoint(ckpt_path)
-    model.to(device)
-    model.eval()
-    return model
-
-
-def make_predictions_and_count(loader, model, h5_path, patch_size):
-    tp = fp = fn = tn = 0
-
-    current_img = None
-    full_pred = None
-    count_map = None
-
-    loader_time = infer_time = stitch_time = 0
-    batch_end = time.time()
-
-    with h5py.File(h5_path, 'r') as f:
-        masks = f["masks"]
-        pad_h, pad_w = loader.dataset.pad_h, loader.dataset.pad_w
-        with torch.inference_mode():
-            for batch in tqdm(loader, desc="Predicting patches", unit="batch", total=len(loader)):
-                loader_time += time.time() - batch_end
-
-                images, _, img_idx, y, x = batch
-                images = images.cuda(non_blocking=True)
-
-                torch.cuda.synchronize()
-
-                t1 = time.time()
-
-                preds = torch.sigmoid(model(images))
-
-                torch.cuda.synchronize()
-                infer_time += time.time() - t1
-
-                preds = preds.cpu()
-
-                t2 = time.time()
-                for i in range(preds.shape[0]):
-                    img = img_idx[i].item()
-                    yi = y[i].item()
-                    xi = x[i].item()
-
-                    # NEW IMAGE → finalize previous one
-                    if current_img is not None and img != current_img:
-                        avg = full_pred / torch.clamp(count_map, min=1)
-                        avg = avg[:orig_h, :orig_w]
-                        pred_mask = (avg > 0.5)
-
-                        gt = torch.from_numpy(masks[current_img]).float()
-
-                        tp += ((pred_mask == 1) & (gt == 1)).sum().item()
-                        fp += ((pred_mask == 1) & (gt == 0)).sum().item()
-                        fn += ((pred_mask == 0) & (gt == 1)).sum().item()
-                        tn += ((pred_mask == 0) & (gt == 0)).sum().item()
-
-                        # cleanup
-                        del full_pred, count_map
-
-                    # initialize new image
-                    if img != current_img:
-                        current_img = img
-
-                        orig_h, orig_w = masks[img].shape
-                        padded_h = orig_h + pad_h
-                        padded_w = orig_w + pad_w
-
-                        full_pred = torch.zeros(padded_h, padded_w, dtype=torch.float16)
-                        count_map = torch.zeros(padded_h, padded_w, dtype=torch.float16)
-
-                    patch = preds[i].squeeze()
-
-                    full_pred[yi:yi+patch_size, xi:xi+patch_size] += patch
-                    count_map[yi:yi+patch_size, xi:xi+patch_size] += 1
-
-                del images, preds
-
-                stitch_time += time.time() - t2
-                batch_end = time.time()
-
-
-        # finalize last image
-        if current_img is not None:
-            avg = full_pred / torch.clamp(count_map, min=1)
-            avg = avg[:orig_h, :orig_w]
-            pred_mask = (avg > 0.5)
-
-            gt = torch.from_numpy(masks[current_img]).float()
-
-            tp += ((pred_mask == 1) & (gt == 1)).sum().item()
-            fp += ((pred_mask == 1) & (gt == 0)).sum().item()
-            fn += ((pred_mask == 0) & (gt == 1)).sum().item()
-            tn += ((pred_mask == 0) & (gt == 0)).sum().item()
-
-    del masks
-    gc.collect()
-    print(f"Loading time: {loader_time:.2f}s, Inference time: {infer_time:.2f}s, Stitching time: {stitch_time:.2f}s")
-
-    return {"tp": tp, "fp": fp, "fn": fn, "tn": tn}
-
+from ..utils import compute_metrics
+from eval_utils import load_data, load_model, build_eval_transform, make_predictions_and_count
 
 def run_benchmark(model, h5_root, dataset_dict, patch_size, batch_size, stride, dataset_flags):
     results = {}
@@ -136,8 +19,7 @@ def run_benchmark(model, h5_root, dataset_dict, patch_size, batch_size, stride, 
 
         dataset_path = h5_root / config["file"]
 
-        data_cfg = {"normalization": "imagenet",}
-        transform = build_transforms(data_cfg, mode="val")
+        transform = build_eval_transform()
 
         loader = load_data(
             dataset_path,
