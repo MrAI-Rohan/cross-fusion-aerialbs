@@ -1,3 +1,15 @@
+import gc
+import h5py
+import time
+from tqdm.auto import tqdm
+
+import torch
+from torch.utils.data import DataLoader
+
+from data.dataset import TiledDataset
+from data.transforms import build_transforms
+from training_module import SegmentationModule
+
 def load_data(h5_path, patch_size,  batch_size, indices=None, stride=None, transform=None, num_workers=2):
     dataset = TiledDataset(h5_path, patch_size=patch_size, transform=transform,
                             use_cache=True, stride=stride, indices=indices)
@@ -12,6 +24,13 @@ def load_model(ckpt_path, device="cuda"):
     model.eval()
     return model
 
+# Comment to add unadded changes to git.
+
+def build_eval_transform():
+    data_cfg = {"normalization": "imagenet",}
+    transform = build_transforms(data_cfg, mode="val")
+    return transform
+
 def update_pr_auc_counts(pred_mask, gt_mask, thresholds, tp, fp, fn,):
     # Flatten to 1D (P = H * W)
     pred_flat = pred_mask.flatten()
@@ -20,7 +39,7 @@ def update_pr_auc_counts(pred_mask, gt_mask, thresholds, tp, fp, fn,):
     # thresholds[:, None] -> shape (T, 1)
     # pred_flat[None, :]  -> shape (1, P)
     # Result: (T, P) boolean matrix where row t is (prob >= threshold[t])
-    pred_binary = thresholds[:, None] >= pred_flat[None, :]
+    pred_binary = thresholds[:, None] <= pred_flat[None, :]
     
     # gt_flat[None, :] -> shape (1, P) broadcasts to (T, P)
     gt_binary = gt_flat[None, :]
@@ -84,7 +103,7 @@ def make_predictions_and_count(loader, model, h5_path, patch_size, threshold=0.5
                         if compute_pr_auc:
                             update_pr_auc_counts(avg, gt, thresholds, tp_auc, fp_auc, fn_auc)
                         else:
-                            pred_mask = (avg > threshold)
+                            pred_mask = (avg >= threshold)
 
                             tp += ((pred_mask == 1) & (gt == 1)).sum().item()
                             fp += ((pred_mask == 1) & (gt == 0)).sum().item()
