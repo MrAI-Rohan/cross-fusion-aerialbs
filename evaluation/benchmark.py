@@ -10,7 +10,7 @@ from datetime import datetime
 from utils import compute_metrics
 from eval_utils import load_data, load_model, build_eval_transform, make_predictions_and_count
 
-def run_benchmark(model, h5_root, dataset_dict, patch_size, batch_size, stride, dataset_flags):
+def run_benchmark(model, h5_root, dataset_dict, patch_size, batch_size, stride, dataset_flags, threshold):
     results = {}
 
     for enabled, (name, config) in zip(dataset_flags, dataset_dict.items()):
@@ -34,7 +34,9 @@ def run_benchmark(model, h5_root, dataset_dict, patch_size, batch_size, stride, 
             loader,
             model,
             dataset_path,
-            patch_size
+            patch_size,
+            threshold=threshold,
+            compute_pr_auc=False
         )
 
         results[name] = compute_metrics(
@@ -109,6 +111,7 @@ def main():
     parser.add_argument("--dest_dir", type=str, help="Directory to save results CSV.")
     parser.add_argument("--dest_file1", type=str, default="benchmark_results.csv", help="File name to store WHU and Massachusetts benchmarks.")
     parser.add_argument("--dest_file2", type=str, default="inria_benchmark_results.csv", help="File name to store INRIA benchmarks.")
+    parser.add_argument("--threshold", type=float, default=0.5, help="Threshold for binary classification.")
 
     
     args = parser.parse_args()
@@ -137,7 +140,8 @@ def main():
         }
 
         results = run_benchmark(model, h5_path, dataset_dict, args.patch_size,
-                                 args.batch_size, args.stride, args.dataset_flags[:2])
+                                 args.batch_size, args.stride, args.dataset_flags[:2],
+                                 threshold=args.threshold)
     
         save_results_to_csv(results, config_name=ckpt_path.stem, csv_path=dest_dir / args.dest_file1)
     
@@ -168,7 +172,7 @@ def main():
         }
 
         inria_results = run_benchmark(model, h5_path, inria_datasets, args.patch_size,
-                                       args.batch_size, args.stride, "1"*len(inria_datasets))
+                                       args.batch_size, args.stride, "1"*len(inria_datasets), threshold=args.threshold)
         
         cf = {i: sum([inria_results[j][i] for j in inria_results]) for i in ["tp", "fp", "fn", "tn"]}
         inria_results["overall"] = compute_metrics(**cf)
