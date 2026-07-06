@@ -8,7 +8,7 @@ from pathlib import Path
 from datetime import datetime
 
 from utils import compute_metrics
-from eval_utils import load_data, load_model, build_eval_transform, make_predictions_and_count
+from evaluation.eval_utils import load_data, load_model, build_eval_transform, make_predictions_and_count
 
 def run_benchmark(model, h5_root, dataset_dict, patch_size, batch_size, stride, dataset_flags, threshold):
     results = {}
