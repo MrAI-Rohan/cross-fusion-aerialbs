@@ -2,7 +2,7 @@ import argparse
 import numpy as np
 from pathlib import Path
 
-from eval_utils import make_predictions_and_count, load_model, load_data, build_eval_transform
+from evaluation.eval_utils import make_predictions_and_count, load_model, load_data, build_eval_transform
 
 def store_pr_auc(config_name, thresholds, tp, fp, fn, dest_dir):
     # --- Move to CPU and convert to NumPy ---
