@@ -2,7 +2,7 @@ import argparse
 import numpy as np
 from pathlib import Path
 
-from evaluation.benchmark import make_predictions_and_count, load_model, load_data, build_eval_transform
+from benchmark import make_predictions_and_count, load_model, load_data, build_eval_transform
 
 def store_pr_auc(config_name, thresholds, tp, fp, fn, dest_dir):
     # --- Move to CPU and convert to NumPy ---
@@ -61,7 +61,7 @@ def main():
     parser.add_argument("--patch_size", type=int, required=True, help="Patch size for testing.")
     parser.add_argument("--batch_size", type=int, default=256, help="Batch size for testing.")
     parser.add_argument("--stride", type=int, default=None, help="Stride for testing.")
-    parser.add_argument("--dest_dir", type=str, help="Directory to save results CSV.")
+    parser.add_argument("--dest_dir", type=str, required=True, help="Directory to save results CSV.")
 
     args = parser.parse_args()
 
