@@ -82,3 +82,7 @@ def main():
                                                 args.patch_size, compute_pr_auc=True)
     
     store_pr_auc(config_name=Path(args.ckpt_path).stem, dest_dir=dest_dir, **pr_auc_metrics,)
+
+
+if __name__ == "__main__":
+    main()
