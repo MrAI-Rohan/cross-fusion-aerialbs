@@ -177,6 +177,7 @@ def main():
         
         cf = {i: sum([inria_results[j][i] for j in inria_results]) for i in ["tp", "fp", "fn", "tn"]}
         inria_results["overall"] = compute_metrics(**cf)
+        inria_results["overall"]["threshold"] = args.threshold
 
         save_results_to_csv(inria_results, config_name=ckpt_path.stem, csv_path=dest_dir / args.dest_file2)
 

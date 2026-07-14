@@ -1,4 +1,5 @@
 import gc
+import cv2
 import h5py
 import time
 from tqdm.auto import tqdm
@@ -24,8 +25,6 @@ def load_model(ckpt_path, device="cuda"):
     model.eval()
     return model
 
-# Comment to add unadded changes to git.
-
 def build_eval_transform():
     data_cfg = {"normalization": "imagenet",}
     transform = build_transforms(data_cfg, mode="val")
@@ -49,9 +48,37 @@ def update_pr_auc_counts(pred_mask, gt_mask, thresholds, tp, fp, fn,):
     fp += torch.sum(pred_binary & ~gt_binary, axis=1)
     fn += torch.sum(~pred_binary & gt_binary, axis=1)
 
+def mask_to_boundary(mask, dilation_ratio = 0.02):
+    # Convert a binary torch mask to its boundary mask.
+
+    h, w = mask.shape
+    diag = (h * h + w * w) ** 0.5
+    d = max(1, int(round(dilation_ratio * diag)))
+
+    mask_np = mask.cpu().numpy().astype(np.uint8) * 255
+
+    # Using Chebyshev distance transform to find the boundary
+    dist = cv2.distanceTransform(
+        mask_np,
+        cv2.DIST_C,
+        cv2.DIST_MASK_PRECISE,
+    )
+
+    eroded = torch.from_numpy(dist > d)
+
+    return mask & (~eroded) # Boundary
+
+def update_boundary_iou_counts(pred_mask, gt_mask, intersection, union,):
+    pred_boundary = mask_to_boundary(pred_mask)
+    gt_boundary = mask_to_boundary(gt_mask)
+    intersection += torch.logical_and(pred_boundary, gt_boundary).sum()
+    union += torch.logical_or(pred_boundary, gt_boundary).sum()
 
 def make_predictions_and_count(loader, model, h5_path, patch_size, threshold=0.5, compute_pr_auc=False):
     tp = fp = fn = tn = 0
+
+    # Boundary IoU counts
+    intersection = union = 0
 
     if compute_pr_auc:
         thresholds = torch.linspace(0, 1, 101)
@@ -110,6 +137,8 @@ def make_predictions_and_count(loader, model, h5_path, patch_size, threshold=0.5
                             fn += ((pred_mask == 0) & (gt == 1)).sum().item()
                             tn += ((pred_mask == 0) & (gt == 0)).sum().item()
 
+                            update_boundary_iou_counts(pred_mask, gt, intersection, union)
+
                         # cleanup
                         del full_pred, count_map
 
@@ -151,6 +180,8 @@ def make_predictions_and_count(loader, model, h5_path, patch_size, threshold=0.5
                 fn += ((pred_mask == 0) & (gt == 1)).sum().item()
                 tn += ((pred_mask == 0) & (gt == 0)).sum().item()
 
+                update_boundary_iou_counts(pred_mask, gt, intersection, union)
+
     del masks
     gc.collect()
     print(f"Loading time: {loader_time:.2f}s, Inference time: {infer_time:.2f}s, Stitching time: {stitch_time:.2f}s")
@@ -158,4 +189,5 @@ def make_predictions_and_count(loader, model, h5_path, patch_size, threshold=0.5
     if compute_pr_auc:
         return {"tp": tp_auc, "fp": fp_auc, "fn": fn_auc, "thresholds": thresholds}
 
-    return {"tp": tp, "fp": fp, "fn": fn, "tn": tn}
+    return {"confusion_matrix": {"tp": tp, "fp": fp, "fn": fn, "tn": tn},
+            "boundary_iou": {"intersection": intersection, "union": union}}

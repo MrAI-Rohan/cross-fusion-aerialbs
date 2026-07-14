@@ -45,7 +45,7 @@ def main(params=None):
 
     pl.seed_everything(config["seed"], workers=True)
 
-    tags = [dataset_name, config["model"]["encoder"], config["model"]["decoder"]]
+    tags = [dataset_name, config["model"]["encoder"], config["model"]["decoder"], f"seed{config['seed']}"]
     if config["model"]["cfenet"]:
         tags.append("cfenet")
     else:
