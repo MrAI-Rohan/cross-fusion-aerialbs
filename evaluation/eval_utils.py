@@ -2,6 +2,7 @@ import gc
 import cv2
 import h5py
 import time
+import numpy as np
 from tqdm.auto import tqdm
 
 import torch
