@@ -74,11 +74,12 @@ def update_boundary_iou_counts(pred_mask, gt_mask, intersection, union,):
     intersection += torch.logical_and(pred_boundary, gt_boundary).sum()
     union += torch.logical_or(pred_boundary, gt_boundary).sum()
 
-def make_predictions_and_count(loader, model, h5_path, patch_size, threshold=0.5, compute_pr_auc=False):
+def make_predictions_and_count(loader, model, h5_path, patch_size, threshold=0.5, compute_pr_auc=False, boundary_iou=False):
     tp = fp = fn = tn = 0
 
     # Boundary IoU counts
-    intersection = union = 0
+    if boundary_iou:
+        intersection = union = 0
 
     if compute_pr_auc:
         thresholds = torch.linspace(0, 1, 101)
@@ -137,7 +138,8 @@ def make_predictions_and_count(loader, model, h5_path, patch_size, threshold=0.5
                             fn += ((pred_mask == 0) & (gt == 1)).sum().item()
                             tn += ((pred_mask == 0) & (gt == 0)).sum().item()
 
-                            update_boundary_iou_counts(pred_mask, gt, intersection, union)
+                            if boundary_iou:
+                                update_boundary_iou_counts(pred_mask, gt, intersection, union)
 
                         # cleanup
                         del full_pred, count_map
@@ -180,7 +182,8 @@ def make_predictions_and_count(loader, model, h5_path, patch_size, threshold=0.5
                 fn += ((pred_mask == 0) & (gt == 1)).sum().item()
                 tn += ((pred_mask == 0) & (gt == 0)).sum().item()
 
-                update_boundary_iou_counts(pred_mask, gt, intersection, union)
+                if boundary_iou:
+                    update_boundary_iou_counts(pred_mask, gt, intersection, union)
 
     del masks
     gc.collect()
@@ -189,5 +192,11 @@ def make_predictions_and_count(loader, model, h5_path, patch_size, threshold=0.5
     if compute_pr_auc:
         return {"tp": tp_auc, "fp": fp_auc, "fn": fn_auc, "thresholds": thresholds}
 
-    return {"confusion_matrix": {"tp": tp, "fp": fp, "fn": fn, "tn": tn},
-            "boundary_iou": {"intersection": intersection, "union": union}}
+    results =  {"confusion_matrix": {"tp": tp, "fp": fp, "fn": fn, "tn": tn}}
+
+    if boundary_iou:
+        results["boundary_iou"] = {"intersection": intersection, "union": union}
+    else:
+        results["boundary_iou"] = None
+    
+    return results

@@ -40,12 +40,14 @@ def run_benchmark(model, h5_root, dataset_dict, patch_size, batch_size, stride, 
         )
 
         results[name] = compute_metrics(
-            counts["tp"],
-            counts["fp"],
-            counts["fn"],
-            counts["tn"]
+            counts["confusion_matrix"]["tp"],
+            counts["confusion_matrix"]["fp"],
+            counts["confusion_matrix"]["fn"],
+            counts["confusion_matrix"]["tn"]
         )
         results[name]["threshold"] = threshold
+
+        # Integrate logic for boundary iou if available.
 
         del loader
         torch.cuda.empty_cache()
