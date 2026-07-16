@@ -1,6 +1,6 @@
 # Final unet cfenet run on WHU. seed 123.
 
-experiment_name: unet_whu_cfenet_main_s123
+experiment_name: unet_whu_cfenet_main_s123-1
 seed: 123
 num_workers: 4
 
