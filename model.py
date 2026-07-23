@@ -8,11 +8,33 @@ from decoders.unet import SwinUNet
 from decoders.upernet import SwinUPerNet
 from decoders.deeplabv3plus import SwinDeepLabV3Plus
 
-def check_hook(module, input, output):
-    if not torch.isfinite(output).all():
-        print(f"CFE output non-finite! max={output.abs().max()}")
-    elif output.abs().max() > 60000:  # approaching fp16 ceiling (~65504)
-        print(f"CFE output near fp16 overflow: {output.abs().max()}")
+
+def check_hook(module, inputs, output):
+    def check_tensor(name, tensor):
+        if not torch.is_tensor(tensor):
+            return
+
+        if not torch.isfinite(tensor).all():
+            print(
+                f"[{module.__class__.__name__}] {name}: "
+                f"non-finite values detected "
+                f"(min={tensor.min().item()}, max={tensor.max().item()})"
+            )
+            return
+
+        max_abs = tensor.abs().max().item()
+        if max_abs > 60000:   # close to FP16 limit (~65504)
+            print(
+                f"[{module.__class__.__name__}] {name}: "
+                f"near FP16 overflow (max abs={max_abs:.2f})"
+            )
+
+    if torch.is_tensor(output):
+        check_tensor("output", output)
+
+    elif isinstance(output, (tuple, list)):
+        for i, tensor in enumerate(output):
+            check_tensor(f"output[{i}]", tensor)
 
 class SegmentationModel(nn.Module):
     """This class will only work properly if the encoder and decoder work correctly together already.
