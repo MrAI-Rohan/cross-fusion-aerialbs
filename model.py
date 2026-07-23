@@ -8,6 +8,12 @@ from decoders.unet import SwinUNet
 from decoders.upernet import SwinUPerNet
 from decoders.deeplabv3plus import SwinDeepLabV3Plus
 
+def check_hook(module, input, output):
+    if not torch.isfinite(output).all():
+        print(f"CFE output non-finite! max={output.abs().max()}")
+    elif output.abs().max() > 60000:  # approaching fp16 ceiling (~65504)
+        print(f"CFE output near fp16 overflow: {output.abs().max()}")
+
 class SegmentationModel(nn.Module):
     """This class will only work properly if the encoder and decoder work correctly together already.
         This doesn't verify anything, just a binding class.
@@ -24,6 +30,7 @@ class SegmentationModel(nn.Module):
             raise Exception("Pass the encoder_channels to use CFENet")
 
         self.cfenet = CFENet(encoder_channels) if cfenet else None
+        self.cfenet.register_forward_hook(check_hook)
     
     def forward(self, x, decoder_precision=None):
         features = self.encoder(x)
