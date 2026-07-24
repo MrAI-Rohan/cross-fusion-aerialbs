@@ -1,6 +1,7 @@
 import os
 import gc
 import h5py
+import pickle
 import torch
 import argparse
 import pandas as pd
@@ -8,6 +9,7 @@ from pathlib import Path
 from datetime import datetime
 
 from utils import compute_metrics
+from evaluation.instance_eval import InstanceMetrics
 from evaluation.eval_utils import load_data, load_model, build_eval_transform, make_predictions_and_count
 
 def run_benchmark(model, h5_root, dataset_dict, patch_size, batch_size, stride, dataset_flags, threshold):
@@ -107,6 +109,53 @@ def save_results_to_csv(results, config_name, csv_path="benchmark_results.csv"):
         index=False
     )
 
+# Line to make commit proper
+
+def update_pkl_dict(pkl_path, key, value):
+    """
+    Update a dictionary stored in a pickle file.
+    """
+
+    if not isinstance(value, dict):
+        raise TypeError("value must be a dictionary")
+
+    # Load existing data
+    if os.path.exists(pkl_path) and os.path.getsize(pkl_path) > 0:
+        with open(pkl_path, "rb") as f:
+            try:
+                data = pickle.load(f)
+            except Exception:
+                data = {}
+    else:
+        data = {}
+
+    # Update (or create) key
+    data.setdefault(key, {})
+    data[key].update(value)
+
+    # Save back
+    with open(pkl_path, "wb") as f:
+        pickle.dump(data, f, protocol=pickle.HIGHEST_PROTOCOL)
+
+def aggregate_inria_instance_metrics(city_metrics):
+    """
+    Aggregate instance metrics across INRIA cities.
+    """
+
+    metrics05 = InstanceMetrics()
+    metrics03 = InstanceMetrics()
+
+    for city in city_metrics.values():
+        metrics05.update(city["iou_0.5"]["size"], city["iou_0.5"]["global"], city["seg_error"])
+        metrics03.update(city["iou_0.3"]["size"], city["iou_0.3"]["global"])
+
+    return {
+        "iou_0.5": metrics05.get_metrics(),
+        "iou_0.3": metrics03.get_metrics(),
+        "seg_error": metrics05.get_segmentation_error(),
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description="Benchmarking script for WHU building segmentation.")
     parser.add_argument("--h5_path", type=str, required=True, help="Path to the HDF5 dataset.")
@@ -116,11 +165,11 @@ def main():
     parser.add_argument("--dataset_flags", type=str, default="111", help="Which datasets to evaluate, show with a 3-digit boolean code,"
                         " first digit for WHU Test, second for Massachusetts, third for INRIA. E.g. '110' means evaluate only WHU Test and Massachusetts.")
     parser.add_argument("--stride", type=int, default=None, help="Stride for testing.")
-    parser.add_argument("--dest_dir", type=str, help="Directory to save results CSV.")
+    parser.add_argument("--dest_dir", type=str, required=True, help="Directory to save results CSV.")
     parser.add_argument("--dest_file1", type=str, default="benchmark_results.csv", help="File name to store WHU and Massachusetts benchmarks.")
     parser.add_argument("--dest_file2", type=str, default="inria_benchmark_results.csv", help="File name to store INRIA benchmarks.")
     parser.add_argument("--threshold", type=float, default=0.5, help="Threshold for binary classification.")
-    parser.add_argument("--dest_file3", type=str, default="instance_metrics.pkl", help="File name to store instance based metrics.")
+    parser.add_argument("--pkl_file", type=str, default="instance_metrics.pkl", help="File name to store instance based metrics.")
 
     
     args = parser.parse_args()
@@ -136,11 +185,9 @@ def main():
     
     config_name = ckpt_path.stem
 
-    model = load_model(args.ckpt_path)
+    model = load_model(ckpt_path)
 
     results = inria_results = None
-
-    instance_results = {}
 
     if args.dataset_flags[:2] != "00":
         dataset_dict = {
@@ -156,11 +203,12 @@ def main():
             }
         }
 
-        results, instance_result = run_benchmark(model, h5_path, dataset_dict, args.patch_size,
+        results, instance_results = run_benchmark(model, h5_path, dataset_dict, args.patch_size,
                                  args.batch_size, args.stride, args.dataset_flags[:2],
                                  threshold=args.threshold)
     
         save_results_to_csv(results, config_name=config_name, csv_path=dest_dir / args.dest_file1)
+        update_pkl_dict(dest_dir / args.pkl_file, config_name, instance_results)
     
     if args.dataset_flags[2] == "1":
         city_indices = get_inria_city_indices(h5_path / "inria_val.h5")
@@ -176,17 +224,22 @@ def main():
                 "gsd": 0.3
             }
 
-        inria_results = run_benchmark(model, h5_path, inria_datasets, args.patch_size,
-                                       args.batch_size, args.stride, "1"*len(inria_datasets), threshold=args.threshold)
+        inria_results, inria_instance_results = (
+            run_benchmark(model, h5_path, inria_datasets, args.patch_size,
+                args.batch_size, args.stride, "1"*len(inria_datasets), threshold=args.threshold)
+        )
         
-        cf = {i: sum([inria_results[j][i] for j in inria_results]) for i in ["tp", "fp", "fn", "tn"]}
-        b = {i: sum([inria_results[j][i] for j in inria_results]) for i in ["intersection", "union"]}
+        cf = {i: sum(inria_results[j][i] for j in inria_results) for i in ["tp", "fp", "fn", "tn"]}
+        b = {i: sum(inria_results[j][i] for j in inria_results) for i in ["intersection", "union"]}
         b["boundary_iou"] = b["intersection"]/(b["union"]+1e-6)
         inria_results["overall"] = compute_metrics(**cf)
         inria_results["overall"].update(b)
         inria_results["overall"]["threshold"] = args.threshold
 
+        inria_instance_results["overall"] = aggregate_inria_instance_metrics(inria_instance_results)
+
         save_results_to_csv(inria_results, config_name=config_name, csv_path=dest_dir / args.dest_file2)
+        update_pkl_dict(dest_dir / args.pkl_file, config_name, inria_instance_results)
 
 
 if __name__ == "__main__":
