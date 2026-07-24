@@ -278,12 +278,14 @@ class InstanceEvaluator:
             "over_severity": over_severity,
         }
     
+# Comment to push properly
+# One more
 
 class InstanceMetrics:
     def __init__(self,):
         bin_names = ['small', 'medium', 'large', 'very_large', 'outlier']
         self.size_metrics = {k: {i: 0 for i in ["tp", "fn", "gt"]} for k in bin_names}
-        self.global_metrics = {k: 0 for k in ["tp", "fp", "fn", "gt"]}
+        self.global_metrics = {k: 0 for k in ["tp", "fp", "fn", "gt", "discarded_preds"]}
 
         self.segmentation_errors = {
                 "under_seg_count": 0,
@@ -295,9 +297,9 @@ class InstanceMetrics:
             }
 
     def update(self, size_metrics, global_metrics, segmentation_error=None):
-        for bin in size_metrics:
-            for k in size_metrics[bin]:
-                self.size_metrics[bin][k] += size_metrics[bin][k]
+        for size_bin in self.size_metrics:
+            for k in self.size_metrics[size_bin]:
+                self.size_metrics[size_bin][k] += size_metrics[size_bin][k]
 
         for k in self.global_metrics:
             self.global_metrics[k] += global_metrics[k]
@@ -313,6 +315,7 @@ class InstanceMetrics:
         # --- Global metrics ---
         g = self.global_metrics
         tp, fp, fn, gt = g['tp'], g['fp'], g['fn'], g['gt']
+        discarded_preds = g['discarded_preds']
 
         precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
         recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
@@ -325,9 +328,11 @@ class InstanceMetrics:
             'fp': fp,
             'fn': fn,
             'gt': gt,
+            'discarded_preds': discarded_preds,
             'precision': precision,
             'recall': recall,
             'f1': f1,
+            'iou': iou
         }
 
         # --- Per-size metrics ---
