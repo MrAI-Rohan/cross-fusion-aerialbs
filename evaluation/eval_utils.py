@@ -68,7 +68,7 @@ def mask_to_boundary(mask, dilation_ratio = 0.02):
 
     eroded = torch.from_numpy(dist > d)
 
-    return mask & (~eroded) # Boundary
+    return (mask > 0) & (~eroded) # Boundary
 
 def update_boundary_iou_counts(pred_mask, gt_mask, intersection, union,):
     pred_boundary = mask_to_boundary(pred_mask)
