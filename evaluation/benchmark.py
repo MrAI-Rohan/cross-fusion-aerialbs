@@ -12,12 +12,14 @@ from evaluation.eval_utils import load_data, load_model, build_eval_transform, m
 
 def run_benchmark(model, h5_root, dataset_dict, patch_size, batch_size, stride, dataset_flags, threshold):
     results = {}
+    instance_results = {}
 
     for enabled, (name, config) in zip(dataset_flags, dataset_dict.items()):
         if enabled != "1":
             continue
 
         dataset_path = h5_root / config["file"]
+        instance_path = h5_root / config["instance_file"]
 
         transform = build_eval_transform()
 
@@ -34,7 +36,9 @@ def run_benchmark(model, h5_root, dataset_dict, patch_size, batch_size, stride, 
             loader,
             model,
             dataset_path,
+            instance_path,
             patch_size,
+            config["gsd"],
             threshold=threshold,
             compute_pr_auc=False
         )
@@ -45,15 +49,16 @@ def run_benchmark(model, h5_root, dataset_dict, patch_size, batch_size, stride, 
             counts["confusion_matrix"]["fn"],
             counts["confusion_matrix"]["tn"]
         )
+        results[name].update(counts["boundary_counts"])
         results[name]["threshold"] = threshold
 
-        # Integrate logic for boundary iou if available.
+        instance_results[name] = counts["instance_based"]
 
         del loader
         torch.cuda.empty_cache()
         gc.collect()
 
-    return results
+    return results, instance_results
 
 
 def get_inria_city_indices(h5_path):
@@ -115,6 +120,7 @@ def main():
     parser.add_argument("--dest_file1", type=str, default="benchmark_results.csv", help="File name to store WHU and Massachusetts benchmarks.")
     parser.add_argument("--dest_file2", type=str, default="inria_benchmark_results.csv", help="File name to store INRIA benchmarks.")
     parser.add_argument("--threshold", type=float, default=0.5, help="Threshold for binary classification.")
+    parser.add_argument("--dest_file3", type=str, default="instance_metrics.pkl", help="File name to store instance based metrics.")
 
     
     args = parser.parse_args()
@@ -127,61 +133,60 @@ def main():
     if not ckpt_path.exists():
         print(f"Checkpoint path {ckpt_path} does not exist.")
         return
+    
+    config_name = ckpt_path.stem
 
     model = load_model(args.ckpt_path)
 
     results = inria_results = None
 
+    instance_results = {}
+
     if args.dataset_flags[:2] != "00":
         dataset_dict = {
             "WHU Test": {
-                "file": "whu_test.h5"
+                "file": "whu_test.h5",
+                "instance_file": "whu_test_instances.h5",
+                "gsd": 0.3
             },
             "Massachusetts": {
-                "file": "mas_test.h5"
+                "file": "mas_test.h5",
+                "instance_file": "mas_test_instances.h5",
+                "gsd": 1
             }
         }
 
-        results = run_benchmark(model, h5_path, dataset_dict, args.patch_size,
+        results, instance_result = run_benchmark(model, h5_path, dataset_dict, args.patch_size,
                                  args.batch_size, args.stride, args.dataset_flags[:2],
                                  threshold=args.threshold)
     
-        save_results_to_csv(results, config_name=ckpt_path.stem, csv_path=dest_dir / args.dest_file1)
+        save_results_to_csv(results, config_name=config_name, csv_path=dest_dir / args.dest_file1)
     
     if args.dataset_flags[2] == "1":
         city_indices = get_inria_city_indices(h5_path / "inria_val.h5")
 
-        inria_datasets = {
-            "austin": {
+        cities = ["austin", "chicago", "kitsap", "tyrol-w", "vienna"]
+        inria_datasets = {}
+
+        for city in cities:
+            inria_datasets[city] = {
                 "file": "inria_val.h5",
-                "indices": city_indices["austin"]
-            },
-            "chicago": {
-                "file": "inria_val.h5",
-                "indices": city_indices["chicago"]
-            },
-            "kitsap": {
-                "file": "inria_val.h5",
-                "indices": city_indices["kitsap"]
-            },
-            "tyrolw": {
-                "file": "inria_val.h5",
-                "indices": city_indices["tyrol-w"]
-            },
-            "vienna": {
-                "file": "inria_val.h5",
-                "indices": city_indices["vienna"]
+                "instance_file": "inria_val_instances.h5",
+                "indices": city_indices[city],
+                "gsd": 0.3
             }
-        }
 
         inria_results = run_benchmark(model, h5_path, inria_datasets, args.patch_size,
                                        args.batch_size, args.stride, "1"*len(inria_datasets), threshold=args.threshold)
         
         cf = {i: sum([inria_results[j][i] for j in inria_results]) for i in ["tp", "fp", "fn", "tn"]}
+        b = {i: sum([inria_results[j][i] for j in inria_results]) for i in ["intersection", "union"]}
+        b["boundary_iou"] = b["intersection"]/(b["union"]+1e-6)
         inria_results["overall"] = compute_metrics(**cf)
+        inria_results["overall"].update(b)
         inria_results["overall"]["threshold"] = args.threshold
 
-        save_results_to_csv(inria_results, config_name=ckpt_path.stem, csv_path=dest_dir / args.dest_file2)
+        save_results_to_csv(inria_results, config_name=config_name, csv_path=dest_dir / args.dest_file2)
 
 
 if __name__ == "__main__":
