@@ -11,7 +11,7 @@ from torch.utils.data import DataLoader
 from data.dataset import TiledDataset
 from data.transforms import build_transforms
 from training_module import SegmentationModule
-from instance_eval import InstanceEvaluator, InstanceMetrics
+from evaluation.instance_eval import InstanceEvaluator, InstanceMetrics
 
 def load_data(h5_path, patch_size,  batch_size, indices=None, stride=None, transform=None, num_workers=2):
     dataset = TiledDataset(h5_path, patch_size=patch_size, transform=transform,
@@ -141,7 +141,7 @@ def make_predictions_and_count(loader, model, h5_path, instance_h5_path, patch_s
         pad_h, pad_w = loader.dataset.pad_h, loader.dataset.pad_w
 
         # Load instances in RAM
-        with h5py.File(instance_h5_path, 'r') as instance_f:
+        with h5py.File(instance_h5_path, 'r') as instance_f:         # Flagged
             assert len(masks) == instance_f["labels"].shape[0], (
                     f"{len(masks)} doesn't match {instance_f["labels"].shape[0]}"
             )
