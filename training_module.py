@@ -27,8 +27,8 @@ class SegmentationModule(pl.LightningModule):
         self.train_stats = BinaryStatScores(threshold=0.5)
         self.val_stats = BinaryStatScores(threshold=0.5)
 
-    def forward(self, x, decoder_precision=None):
-        return self.model(x, decoder_precision=decoder_precision)
+    def forward(self, x, decoder_precision=None, cfenet_precision=None):
+        return self.model(x, decoder_precision=decoder_precision, cfenet_precision=cfenet_precision)
 
     def training_step(self, batch, batch_idx):
 
