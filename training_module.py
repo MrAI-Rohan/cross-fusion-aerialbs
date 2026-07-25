@@ -38,9 +38,10 @@ class SegmentationModule(pl.LightningModule):
 
         images, masks, _, _, _ = batch
 
-        fp32 = "fp32" if self.config["training"].get("decoder_force_fp32", False) else None
+        decoder_fp32 = "fp32" if self.config["training"].get("decoder_force_fp32", False) else None
+        cfenet_fp32 = "fp32" if self.config["training"].get("cfenet_force_fp32", False) else None
         
-        preds = self(images, decoder_precision=fp32)
+        preds = self(images, decoder_precision=decoder_fp32, cfenet_precision=cfenet_fp32)
 
         loss = self.loss_fn(preds, masks)
 

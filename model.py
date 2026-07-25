@@ -55,12 +55,17 @@ class SegmentationModel(nn.Module):
         if self.cfenet:
             self.cfenet.register_forward_hook(check_hook)
     
-    def forward(self, x, decoder_precision=None):
+    def forward(self, x, decoder_precision=None, cfenet_precision=None):
         features = self.encoder(x)
         permuted_features = [f.permute(0, 3, 1, 2) for f in features]
 
         if self.cfenet is not None:
-            permuted_features = self.cfenet(permuted_features)
+            if cfenet_precision == "fp32":
+                with torch.autocast(device_type="cuda", enabled=False):    
+                    permuted_features = [f.float() for f in permuted_features]
+                    permuted_features = self.cfenet(permuted_features)
+            else:
+                permuted_features = self.cfenet(permuted_features)
         
         # To prevent overflow in UPerNet, the decoder is run in FP32 precision if specified.
         if decoder_precision == "fp32":
