@@ -1,4 +1,5 @@
 # UPerNet and CFENet with SwinT on Massachusetts. Seed 123.
+# Proper commit
 
 experiment_name: upernet_mas_cfenet_main_s123
 seed: 123
@@ -12,7 +13,7 @@ model:
   pretrained: true
 
 data:
-  dataset: mas
+  dataset: massachusetts
   patch_size: 224
   train_batch_size: 32
   val_batch_size: 64
