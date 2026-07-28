@@ -1,6 +1,6 @@
 # Vanilla DeepLabV3+ and CFENet with SwinT on Massachusetts. Seed 456
 
-experiment_name: dlab_whu_cfenet_main_s456
+experiment_name: dlab_mas_cfenet_main_s456
 seed: 456
 num_workers: 4
 
