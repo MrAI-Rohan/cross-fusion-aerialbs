@@ -39,6 +39,9 @@ def main(params=None):
 
     experiment_name = config["experiment_name"]
     dataset_name = config["data"]["dataset"]
+
+    assert experiment_name.split("_")[1] in dataset_name, "Config and dataset mismatch"
+
     checkpoint_dir = os.path.join(args.checkpoint_dir, dataset_name, experiment_name)
     os.makedirs(checkpoint_dir, exist_ok=True)
     shutil.copy(args.config, os.path.join(checkpoint_dir, "config.yaml"))
