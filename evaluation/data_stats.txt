@@ -7,8 +7,6 @@ Train-Validation-Test splits:
     'mas_test': (10, 1500, 1500, 3),
     'inria_val': (25, 5000, 5000, 3)}
 
-
-
 # for validation split wasn't computed. INRIA is only for testing.
 Pixel based statistics:
     WHU train: {'positive_pixels': 233932298,

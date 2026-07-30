@@ -9,6 +9,7 @@ from pathlib import Path
 from datetime import datetime
 
 from utils import compute_metrics
+import evaluation.pr_auc as pr_auc
 from evaluation.instance_eval import InstanceMetrics
 from evaluation.eval_utils import load_data, load_model, build_eval_transform, make_predictions_and_count
 
@@ -170,6 +171,7 @@ def main():
     parser.add_argument("--dest_file2", type=str, default="inria_benchmark_results.csv", help="File name to store INRIA benchmarks.")
     parser.add_argument("--threshold", type=float, default=0.5, help="Threshold for binary classification.")
     parser.add_argument("--pkl_file", type=str, default="instance_metrics.pkl", help="File name to store instance based metrics.")
+    parser.add_argument("--pr_auc_dir", type=str, default=None, help="Save pr auc data and then use optimal threshold to benchmark.")
 
     
     args = parser.parse_args()
@@ -186,6 +188,29 @@ def main():
     config_name = ckpt_path.stem
 
     model = load_model(ckpt_path)
+
+    threshold = args.threshold
+
+    if args.pr_auc_dir:
+        if "whu" in config_name:
+            val_h5_path = "whu_val.h5"
+        elif "mas" in config_name:
+            val_h5_path = "mas_val.h5"
+
+        assert val_h5_path in ["whu_val.h5", "mas_val.h5"]
+
+        val_h5_path = h5_path / val_h5_path 
+
+        threshold = pr_auc.main(
+            {
+            "h5_path": str(val_h5_path),
+            "ckpt_path": str(ckpt_path),
+            "patch_size": args.patch_size,
+            "batch_size": args.batch_size,
+            "stride": args.stride,
+            "dest_dir": args.pr_auc_dir
+        })
+
 
     results = inria_results = None
 
@@ -205,7 +230,7 @@ def main():
 
         results, instance_results = run_benchmark(model, h5_path, dataset_dict, args.patch_size,
                                  args.batch_size, args.stride, args.dataset_flags[:2],
-                                 threshold=args.threshold)
+                                 threshold=threshold)
     
         save_results_to_csv(results, config_name=config_name, csv_path=dest_dir / args.dest_file1)
         update_pkl_dict(dest_dir / args.pkl_file, config_name, instance_results)
@@ -226,7 +251,7 @@ def main():
 
         inria_results, inria_instance_results = (
             run_benchmark(model, h5_path, inria_datasets, args.patch_size,
-                args.batch_size, args.stride, "1"*len(inria_datasets), threshold=args.threshold)
+                args.batch_size, args.stride, "1"*len(inria_datasets), threshold=threshold)
         )
         
         cf = {i: sum(inria_results[j][i] for j in inria_results) for i in ["tp", "fp", "fn", "tn"]}
@@ -234,7 +259,7 @@ def main():
         b["boundary_iou"] = b["intersection"]/(b["union"]+1e-6)
         inria_results["overall"] = compute_metrics(**cf)
         inria_results["overall"].update(b)
-        inria_results["overall"]["threshold"] = args.threshold
+        inria_results["overall"]["threshold"] = threshold
 
         inria_instance_results["overall"] = aggregate_inria_instance_metrics(inria_instance_results)
 

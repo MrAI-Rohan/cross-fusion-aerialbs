@@ -1,6 +1,7 @@
 import argparse
 import numpy as np
 from pathlib import Path
+from types import SimpleNamespace
 
 from evaluation.eval_utils import make_predictions_and_count, load_model, load_data, build_eval_transform
 
@@ -53,17 +54,24 @@ def store_pr_auc(config_name, thresholds, tp, fp, fn, dest_dir):
     print(f"   PR-AUC: {pr_auc:.4f}")
     print(f"   Optimal threshold: {optimal_threshold:.3f} (F1={optimal_f1:.4f})")
 
+    return optimal_threshold
 
-def main():
-    parser = argparse.ArgumentParser(description="Compute and store PR-AUC data.")
-    parser.add_argument("--h5_path", type=str, required=True, help="Path to the HDF5 dataset.")
-    parser.add_argument("--ckpt_path", type=str, required=True, help="Path to the model checkpoint.")
-    parser.add_argument("--patch_size", type=int, required=True, help="Patch size for testing.")
-    parser.add_argument("--batch_size", type=int, default=256, help="Batch size for testing.")
-    parser.add_argument("--stride", type=int, default=None, help="Stride for testing.")
-    parser.add_argument("--dest_dir", type=str, required=True, help="Directory to save results CSV.")
 
-    args = parser.parse_args()
+def main(params):
+    if params is None:
+        parser = argparse.ArgumentParser(description="Compute and store PR-AUC data.")
+        parser.add_argument("--h5_path", type=str, required=True, help="Path to the HDF5 dataset.")
+        parser.add_argument("--ckpt_path", type=str, required=True, help="Path to the model checkpoint.")
+        parser.add_argument("--patch_size", type=int, required=True, help="Patch size for testing.")
+        parser.add_argument("--batch_size", type=int, default=256, help="Batch size for testing.")
+        parser.add_argument("--stride", type=int, default=None, help="Stride for testing.")
+        parser.add_argument("--dest_dir", type=str, required=True, help="Directory to save results npz file.")
+
+        args = parser.parse_args()
+
+    else:
+        # Convert dict into an object with attribute access
+        args = SimpleNamespace(**params)
 
     model = load_model(args.ckpt_path)
     transform = build_eval_transform()
@@ -81,7 +89,11 @@ def main():
     pr_auc_metrics = make_predictions_and_count(loader, model, args.h5_path, 
                                                 args.patch_size, compute_pr_auc=True)
     
-    store_pr_auc(config_name=Path(args.ckpt_path).stem, dest_dir=dest_dir, **pr_auc_metrics,)
+    optimal_threshold = store_pr_auc(config_name=Path(args.ckpt_path).stem,
+                                     dest_dir=dest_dir,
+                                     **pr_auc_metrics,)
+
+    return optimal_threshold
 
 
 if __name__ == "__main__":
