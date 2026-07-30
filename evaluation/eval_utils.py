@@ -111,7 +111,7 @@ def make_predictions_and_count(loader, model, h5_path, patch_size, instance_h5_p
                                gsd=None, threshold=0.5, compute_pr_auc=False,):
     # I should group counts in dictionaries to improve readability if pipeline grows.
 
-    if compute_pr_auc and (gsd is None or instance_h5_path is None):
+    if not compute_pr_auc and (gsd is None or instance_h5_path is None):
         raise Exception("Not passed: gsd or instance_h5_path.")
 
     # Pixel based counts
