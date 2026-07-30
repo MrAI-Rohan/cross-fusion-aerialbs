@@ -86,8 +86,11 @@ def main(params):
     dest_dir = Path(args.dest_dir)
     dest_dir.mkdir(parents=True, exist_ok=True)
     
-    pr_auc_metrics = make_predictions_and_count(loader, model, args.h5_path, 
-                                                args.patch_size, compute_pr_auc=True)
+    pr_auc_metrics = make_predictions_and_count(loader=loader,
+                                                model=model,
+                                                h5_path=args.h5_path, 
+                                                patch_size=args.patch_size,
+                                                compute_pr_auc=True)
     
     optimal_threshold = store_pr_auc(config_name=Path(args.ckpt_path).stem,
                                      dest_dir=dest_dir,

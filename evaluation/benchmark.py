@@ -36,12 +36,12 @@ def run_benchmark(model, h5_root, dataset_dict, patch_size, batch_size, stride, 
         )
 
         counts = make_predictions_and_count(
-            loader,
-            model,
-            dataset_path,
-            instance_path,
-            patch_size,
-            config["gsd"],
+            loader=loader,
+            model=model,
+            h5_path=dataset_path,
+            instance_h5_path=instance_path,
+            patch_size=patch_size,
+            gsd=config["gsd"],
             threshold=threshold,
             compute_pr_auc=False
         )
