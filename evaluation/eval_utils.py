@@ -144,11 +144,12 @@ def make_predictions_and_count(loader, model, h5_path, patch_size, instance_h5_p
         pad_h, pad_w = loader.dataset.pad_h, loader.dataset.pad_w
 
         # Load instances in RAM
-        with h5py.File(instance_h5_path, 'r') as instance_f:         # Flagged
-            assert len(masks) == instance_f["labels"].shape[0], (
-                    f"{len(masks)} doesn't match {instance_f["labels"].shape[0]}"
-            )
-            gt_instances = [get_gt_instance_meta(i, instance_f) for i in range(len(masks))]
+        if not compute_pr_auc:
+            with h5py.File(instance_h5_path, 'r') as instance_f:
+                assert len(masks) == instance_f["labels"].shape[0], (
+                        f"{len(masks)} doesn't match {instance_f["labels"].shape[0]}"
+                )
+                gt_instances = [get_gt_instance_meta(i, instance_f) for i in range(len(masks))]
             
         with torch.inference_mode():
             for batch in tqdm(loader, desc="Predicting patches", unit="batch", total=len(loader)):
