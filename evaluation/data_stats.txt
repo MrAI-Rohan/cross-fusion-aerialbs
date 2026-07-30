@@ -1,0 +1,179 @@
+Train-Validation-Test splits:
+    {'whu_train': (5732, 512, 512, 3),
+    'whu_val': (1228, 512, 512, 3),
+    'whu_test': (1228, 512, 512, 3),
+    'mas_train': (137, 1500, 1500, 3),
+    'mas_val': (4, 1500, 1500, 3),
+    'mas_test': (10, 1500, 1500, 3),
+    'inria_val': (25, 5000, 5000, 3)}
+
+
+
+# for validation split wasn't computed. INRIA is only for testing.
+Pixel based statistics:
+    WHU train: {'positive_pixels': 233932298,
+                'negative_pixels': 1268677110,
+                'total_pixels': 1502609408,
+                'positive_fraction': 0.1556840365530308,
+                'negative_fraction': 0.8443159634469691,
+                'positive_percent': 15.568403655303081,
+                'negative_percent': 84.43159634469691}
+    
+    WHU test: {'positive_pixels': 49962704,
+                'negative_pixels': 271950128,
+                'total_pixels': 321912832,
+                'positive_fraction': 0.15520569245279417,
+                'negative_fraction': 0.8447943075472059,
+                'positive_percent': 15.520569245279418,
+                'negative_percent': 84.47943075472058}
+
+    Massachusetts train: {'positive_pixels': 40675391,
+                        'negative_pixels': 267574609,
+                        'total_pixels': 308250000,
+                        'positive_fraction': 0.1319558507704785,
+                        'negative_fraction': 0.8680441492295214,
+                        'positive_percent': 13.19558507704785,
+                        'negative_percent': 86.80441492295215}
+    
+    Massachusetts test: {'positive_pixels': 4186488,
+                        'negative_pixels': 18313512,
+                        'total_pixels': 22500000,
+                        'positive_fraction': 0.18606613333333333,
+                        'negative_fraction': 0.8139338666666667,
+                        'positive_percent': 18.606613333333332,
+                        'negative_percent': 81.39338666666667}
+
+    INRIA: {'positive_pixels': 86200310,
+                        'negative_pixels': 538799690,
+                        'total_pixels': 625000000,
+                        'positive_fraction': 0.137920496,
+                        'negative_fraction': 0.862079504,
+                        'positive_percent': 13.7920496,
+                        'negative_percent': 86.2079504}
+
+AF means after removing patches that have positive ratio < 0.05.
+Patch based statistics:
+    WHU train: {'total_patches': 91712,
+                'mean_positive_ratio': 0.15596328675746918,
+                'median_positive_ratio': 0.1515664905309677,
+                'std_positive_ratio': 0.15501944720745087,
+                'min_positive_ratio': 0.0,
+                'max_positive_ratio': 1.0,
+                'no_building_patches': 27488,
+                'patches_lt_2_percent': 31592,
+                'patches_lt_5_percent': 34845}
+    
+    WHU test: {'total_patches': 19648,
+                'mean_positive_ratio': 0.15578341484069824,
+                'median_positive_ratio': 0.15166613459587097,
+                'std_positive_ratio': 0.1576022058725357,
+                'min_positive_ratio': 0.0,
+                'max_positive_ratio': 1.0,
+                'no_building_patches': 6060,
+                'patches_lt_2_percent': 6844,
+                'patches_lt_5_percent': 7536}
+
+    WHU train AF: {'total_patches': 56867,
+                'mean_positive_ratio': 0.248980313539505,
+                'median_positive_ratio': 0.23469388484954834,
+                'std_positive_ratio': 0.12615123391151428,
+                'min_positive_ratio': 0.050003986805677414,
+                'max_positive_ratio': 1.0,
+                'no_building_patches': 0,
+                'patches_lt_2_percent': 0,
+                'patches_lt_5_percent': 0}
+
+    Massachusetts train: {'total_patches': 23153,
+                'mean_positive_ratio': 0.1318550854921341,
+                'median_positive_ratio': 0.12211017310619354,
+                'std_positive_ratio': 0.10681012272834778,
+                'min_positive_ratio': 0.0,
+                'max_positive_ratio': 0.9993224143981934,
+                'no_building_patches': 3073,
+                'patches_lt_2_percent': 4612,
+                'patches_lt_5_percent': 6337}
+    
+    Massachusetts test: {'total_patches': 1690,
+                'mean_positive_ratio': 0.1873168647289276,
+                'median_positive_ratio': 0.1780034303665161,
+                'std_positive_ratio': 0.1370621919631958,
+                'min_positive_ratio': 0.0,
+                'max_positive_ratio': 0.7574537396430969,
+                'no_building_patches': 155,
+                'patches_lt_2_percent': 252,
+                'patches_lt_5_percent': 317}
+
+    Massachusetts train AF: {'total_patches': 16816,
+                'mean_positive_ratio': 0.17720024287700653,
+                'median_positive_ratio': 0.1622389256954193,
+                'std_positive_ratio': 0.0900130420923233,
+                'min_positive_ratio': 0.050003986805677414,
+                'max_positive_ratio': 0.9993224143981934,
+                'no_building_patches': 0,
+                'patches_lt_2_percent': 0,
+                'patches_lt_5_percent': 0}
+
+    INRIA: {'total_patches': 48400,
+            'mean_positive_ratio': 0.13809169828891754,
+            'median_positive_ratio': 0.0884486585855484,
+            'std_positive_ratio': 0.1636030673980713,
+            'min_positive_ratio': 0.0,
+            'max_positive_ratio': 1.0,
+            'no_building_patches': 17068,
+            'patches_lt_2_percent': 19696,
+            'patches_lt_5_percent': 21711}
+
+Instance Area statistics:
+    WHU train: {'count': 151997,
+                'min': 0.09,
+                'max': 18609.48,
+                'mean': 138.51527872260638,
+                'median': 90.0,
+                'std': 346.50915193539373,
+                'q1': 31.59,
+                'q3': 165.23999999999998,
+                'iqr': 133.64999999999998,
+                'p1': 0.44999999999999996,
+                'p5': 4.95,
+                'p95': 307.26,
+                'p99': 1052.5716000000043}
+
+    Massachusetts train: {'count': 194602,
+                        'min': 1,
+                        'max': 188967,
+                        'mean': 209.01836055127902,
+                        'median': 122.0,
+                        'std': 836.5236458404776,
+                        'q1': 90.0,
+                        'q3': 160.0,
+                        'iqr': 70.0,
+                        'p1': 20.0,
+                        'p5': 42.0,
+                        'p95': 484.0,
+                        'p99': 2071.9899999999907}
+
+    INRIA: {'count': 32794,
+            'min': 0.09,
+            'max': 116792.81999999999,
+            'mean': 236.56851558211866,
+            'median': 106.2,
+            'std': 990.1215340221225,
+            'q1': 44.19,
+            'q3': 195.75,
+            'iqr': 151.56,
+            'p1': 0.36,
+            'p5': 6.66,
+            'p95': 588.9014999999998,
+            'p99': 3464.0216999999957}
+
+# Noise floor counts are involved too.
+# bin_labels: ["<2", "2–75", "75–300", "300–1000", "1000–5000", ">5000"]
+Size bin Distribution:
+    Raw counts per bin: {'WHU train': [4169, 67190, 72519, 6519, 1440, 160],
+                        'Massachusetts train': [207, 29829, 149121, 10736, 4185, 524],
+                        'INRIA': [630, 11797, 16173, 3213, 806, 175]}
+
+    Ratios per bin: {'INRIA': [1.92108312, 35.97304385, 49.31694822,  9.79752394,  2.45776666, 0.5336342],
+                    'WHU train': [2.74281729, 44.20481983, 47.71081008,  4.28890044,  0.94738712, 0.10526524],
+                    'Massachusetts train': [0.10637095, 15.32820834, 76.62870885,  5.51690116,  2.15054316, 0.26926753]}
+
