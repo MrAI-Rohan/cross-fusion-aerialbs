@@ -59,7 +59,10 @@ Patch based statistics:
                 'max_positive_ratio': 1.0,
                 'no_building_patches': 27488,
                 'patches_lt_2_percent': 31592,
-                'patches_lt_5_percent': 34845}
+                'patches_lt_5_percent': 34845,
+                'patches_lt_10_percent': 39733,
+                'patches_lt_15_percent': 45617}
+
     
     WHU test: {'total_patches': 19648,
                 'mean_positive_ratio': 0.15578341484069824,
@@ -69,7 +72,9 @@ Patch based statistics:
                 'max_positive_ratio': 1.0,
                 'no_building_patches': 6060,
                 'patches_lt_2_percent': 6844,
-                'patches_lt_5_percent': 7536}
+                'patches_lt_5_percent': 7536,
+                'patches_lt_10_percent': 8537,
+                'patches_lt_15_percent': 9782}
 
     WHU train AF: {'total_patches': 56867,
                 'mean_positive_ratio': 0.248980313539505,
@@ -79,7 +84,9 @@ Patch based statistics:
                 'max_positive_ratio': 1.0,
                 'no_building_patches': 0,
                 'patches_lt_2_percent': 0,
-                'patches_lt_5_percent': 0}
+                'patches_lt_5_percent': 0,
+                'patches_lt_10_percent': 4888,
+                'patches_lt_15_percent': 10772}
 
     Massachusetts train: {'total_patches': 23153,
                 'mean_positive_ratio': 0.1318550854921341,
@@ -89,7 +96,9 @@ Patch based statistics:
                 'max_positive_ratio': 0.9993224143981934,
                 'no_building_patches': 3073,
                 'patches_lt_2_percent': 4612,
-                'patches_lt_5_percent': 6337}
+                'patches_lt_5_percent': 6337
+                'patches_lt_10_percent': 9706,
+                'patches_lt_15_percent': 13856}
     
     Massachusetts test: {'total_patches': 1690,
                 'mean_positive_ratio': 0.1873168647289276,
@@ -99,7 +108,9 @@ Patch based statistics:
                 'max_positive_ratio': 0.7574537396430969,
                 'no_building_patches': 155,
                 'patches_lt_2_percent': 252,
-                'patches_lt_5_percent': 317}
+                'patches_lt_5_percent': 317,
+                'patches_lt_10_percent': 438,
+                'patches_lt_15_percent': 652}
 
     Massachusetts train AF: {'total_patches': 16816,
                 'mean_positive_ratio': 0.17720024287700653,
@@ -109,7 +120,9 @@ Patch based statistics:
                 'max_positive_ratio': 0.9993224143981934,
                 'no_building_patches': 0,
                 'patches_lt_2_percent': 0,
-                'patches_lt_5_percent': 0}
+                'patches_lt_5_percent': 0,
+                'patches_lt_10_percent': 3369,
+                'patches_lt_15_percent': 7519}
 
     INRIA: {'total_patches': 48400,
             'mean_positive_ratio': 0.13809169828891754,
@@ -119,7 +132,9 @@ Patch based statistics:
             'max_positive_ratio': 1.0,
             'no_building_patches': 17068,
             'patches_lt_2_percent': 19696,
-            'patches_lt_5_percent': 21711}
+            'patches_lt_5_percent': 21711,
+            'patches_lt_10_percent': 24985,
+            'patches_lt_15_percent': 29169}
 
 Instance Area statistics:
     WHU train: {'count': 151997,

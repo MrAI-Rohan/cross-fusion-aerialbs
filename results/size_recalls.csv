@@ -1,0 +1,481 @@
+name,training_dataset,dataset,size,recall
+DeepLabV3+,Massachusetts,Massachusetts,large,0.7461 ± 0.0136
+DeepLabV3+,Massachusetts,Massachusetts,medium,0.8934 ± 0.0087
+DeepLabV3+,Massachusetts,Massachusetts,outlier,0.8000 ± 0.0294
+DeepLabV3+,Massachusetts,Massachusetts,small,0.4708 ± 0.0143
+DeepLabV3+,Massachusetts,Massachusetts,very_large,0.7578 ± 0.0155
+DeepLabV3+,Massachusetts,WHU Test,large,0.8205 ± 0.0280
+DeepLabV3+,Massachusetts,WHU Test,medium,0.7604 ± 0.0179
+DeepLabV3+,Massachusetts,WHU Test,outlier,0.9649 ± 0.0304
+DeepLabV3+,Massachusetts,WHU Test,small,0.5174 ± 0.0126
+DeepLabV3+,Massachusetts,WHU Test,very_large,0.8467 ± 0.0208
+DeepLabV3+,Massachusetts,austin,large,0.6285 ± 0.0187
+DeepLabV3+,Massachusetts,austin,medium,0.5314 ± 0.0059
+DeepLabV3+,Massachusetts,austin,outlier,0.6296 ± 0.1697
+DeepLabV3+,Massachusetts,austin,small,0.3404 ± 0.0131
+DeepLabV3+,Massachusetts,austin,very_large,0.8354 ± 0.0499
+DeepLabV3+,Massachusetts,chicago,large,0.4589 ± 0.0346
+DeepLabV3+,Massachusetts,chicago,medium,0.1898 ± 0.0267
+DeepLabV3+,Massachusetts,chicago,outlier,0.6364 ± 0.0787
+DeepLabV3+,Massachusetts,chicago,small,0.2076 ± 0.0303
+DeepLabV3+,Massachusetts,chicago,very_large,0.6177 ± 0.0487
+DeepLabV3+,Massachusetts,kitsap,large,0.8210 ± 0.0103
+DeepLabV3+,Massachusetts,kitsap,medium,0.5658 ± 0.0149
+DeepLabV3+,Massachusetts,kitsap,outlier,0.0000 ± 0.0000
+DeepLabV3+,Massachusetts,kitsap,small,0.1754 ± 0.0117
+DeepLabV3+,Massachusetts,kitsap,very_large,0.1667 ± 0.0000
+DeepLabV3+,Massachusetts,overall,large,0.6465 ± 0.0239
+DeepLabV3+,Massachusetts,overall,medium,0.3807 ± 0.0183
+DeepLabV3+,Massachusetts,overall,outlier,0.5524 ± 0.0315
+DeepLabV3+,Massachusetts,overall,small,0.2573 ± 0.0195
+DeepLabV3+,Massachusetts,overall,very_large,0.6137 ± 0.0265
+DeepLabV3+,Massachusetts,tyrol-w,large,0.6698 ± 0.0569
+DeepLabV3+,Massachusetts,tyrol-w,medium,0.6986 ± 0.0321
+DeepLabV3+,Massachusetts,tyrol-w,outlier,0.5833 ± 0.0833
+DeepLabV3+,Massachusetts,tyrol-w,small,0.2723 ± 0.0213
+DeepLabV3+,Massachusetts,tyrol-w,very_large,0.4965 ± 0.0586
+DeepLabV3+,Massachusetts,vienna,large,0.7769 ± 0.0185
+DeepLabV3+,Massachusetts,vienna,medium,0.7741 ± 0.0321
+DeepLabV3+,Massachusetts,vienna,outlier,0.5303 ± 0.0379
+DeepLabV3+,Massachusetts,vienna,small,0.2998 ± 0.0223
+DeepLabV3+,Massachusetts,vienna,very_large,0.6027 ± 0.0191
+DeepLabV3+,WHU,Massachusetts,large,0.4663 ± 0.0474
+DeepLabV3+,WHU,Massachusetts,medium,0.3906 ± 0.0655
+DeepLabV3+,WHU,Massachusetts,outlier,0.5111 ± 0.0949
+DeepLabV3+,WHU,Massachusetts,small,0.0667 ± 0.0153
+DeepLabV3+,WHU,Massachusetts,very_large,0.5150 ± 0.0785
+DeepLabV3+,WHU,WHU Test,large,0.9505 ± 0.0023
+DeepLabV3+,WHU,WHU Test,medium,0.9765 ± 0.0023
+DeepLabV3+,WHU,WHU Test,outlier,1.0000 ± 0.0000
+DeepLabV3+,WHU,WHU Test,small,0.7836 ± 0.0234
+DeepLabV3+,WHU,WHU Test,very_large,0.9387 ± 0.0034
+DeepLabV3+,WHU,austin,large,0.7243 ± 0.0419
+DeepLabV3+,WHU,austin,medium,0.6418 ± 0.0359
+DeepLabV3+,WHU,austin,outlier,0.4815 ± 0.0642
+DeepLabV3+,WHU,austin,small,0.3608 ± 0.0256
+DeepLabV3+,WHU,austin,very_large,0.8889 ± 0.0214
+DeepLabV3+,WHU,chicago,large,0.4461 ± 0.0115
+DeepLabV3+,WHU,chicago,medium,0.1867 ± 0.0248
+DeepLabV3+,WHU,chicago,outlier,0.8333 ± 0.0525
+DeepLabV3+,WHU,chicago,small,0.2944 ± 0.0428
+DeepLabV3+,WHU,chicago,very_large,0.6215 ± 0.0149
+DeepLabV3+,WHU,kitsap,large,0.8883 ± 0.0075
+DeepLabV3+,WHU,kitsap,medium,0.6092 ± 0.0057
+DeepLabV3+,WHU,kitsap,outlier,0.0000 ± 0.0000
+DeepLabV3+,WHU,kitsap,small,0.1657 ± 0.0068
+DeepLabV3+,WHU,kitsap,very_large,0.6111 ± 0.2546
+DeepLabV3+,WHU,overall,large,0.6942 ± 0.0286
+DeepLabV3+,WHU,overall,medium,0.4181 ± 0.0267
+DeepLabV3+,WHU,overall,outlier,0.5714 ± 0.0800
+DeepLabV3+,WHU,overall,small,0.3143 ± 0.0287
+DeepLabV3+,WHU,overall,very_large,0.6555 ± 0.0461
+DeepLabV3+,WHU,tyrol-w,large,0.7356 ± 0.0352
+DeepLabV3+,WHU,tyrol-w,medium,0.7664 ± 0.0558
+DeepLabV3+,WHU,tyrol-w,outlier,0.5278 ± 0.0962
+DeepLabV3+,WHU,tyrol-w,small,0.3557 ± 0.0304
+DeepLabV3+,WHU,tyrol-w,very_large,0.4965 ± 0.0614
+DeepLabV3+,WHU,vienna,large,0.7870 ± 0.0387
+DeepLabV3+,WHU,vienna,medium,0.8275 ± 0.0173
+DeepLabV3+,WHU,vienna,outlier,0.5379 ± 0.0860
+DeepLabV3+,WHU,vienna,small,0.3206 ± 0.0099
+DeepLabV3+,WHU,vienna,very_large,0.6607 ± 0.0595
+DeepLabV3+ + CFENet,Massachusetts,Massachusetts,large,0.7667 ± 0.0094
+DeepLabV3+ + CFENet,Massachusetts,Massachusetts,medium,0.9121 ± 0.0036
+DeepLabV3+ + CFENet,Massachusetts,Massachusetts,outlier,0.8259 ± 0.0064
+DeepLabV3+ + CFENet,Massachusetts,Massachusetts,small,0.4985 ± 0.0113
+DeepLabV3+ + CFENet,Massachusetts,Massachusetts,very_large,0.7922 ± 0.0203
+DeepLabV3+ + CFENet,Massachusetts,WHU Test,large,0.7959 ± 0.0333
+DeepLabV3+ + CFENet,Massachusetts,WHU Test,medium,0.7349 ± 0.0516
+DeepLabV3+ + CFENet,Massachusetts,WHU Test,outlier,0.7982 ± 0.1519
+DeepLabV3+ + CFENet,Massachusetts,WHU Test,small,0.4395 ± 0.0484
+DeepLabV3+ + CFENet,Massachusetts,WHU Test,very_large,0.8229 ± 0.0259
+DeepLabV3+ + CFENet,Massachusetts,austin,large,0.5690 ± 0.0568
+DeepLabV3+ + CFENet,Massachusetts,austin,medium,0.4921 ± 0.0329
+DeepLabV3+ + CFENet,Massachusetts,austin,outlier,0.4074 ± 0.2313
+DeepLabV3+ + CFENet,Massachusetts,austin,small,0.3206 ± 0.0320
+DeepLabV3+ + CFENet,Massachusetts,austin,very_large,0.7778 ± 0.0123
+DeepLabV3+ + CFENet,Massachusetts,chicago,large,0.4895 ± 0.0448
+DeepLabV3+ + CFENet,Massachusetts,chicago,medium,0.2253 ± 0.0167
+DeepLabV3+ + CFENet,Massachusetts,chicago,outlier,0.7121 ± 0.0694
+DeepLabV3+ + CFENet,Massachusetts,chicago,small,0.2072 ± 0.0183
+DeepLabV3+ + CFENet,Massachusetts,chicago,very_large,0.6384 ± 0.0652
+DeepLabV3+ + CFENet,Massachusetts,kitsap,large,0.6174 ± 0.1141
+DeepLabV3+ + CFENet,Massachusetts,kitsap,medium,0.4145 ± 0.0768
+DeepLabV3+ + CFENet,Massachusetts,kitsap,outlier,0.0000 ± 0.0000
+DeepLabV3+ + CFENet,Massachusetts,kitsap,small,0.1579 ± 0.0365
+DeepLabV3+ + CFENet,Massachusetts,kitsap,very_large,0.1667 ± 0.0000
+DeepLabV3+ + CFENet,Massachusetts,overall,large,0.6103 ± 0.0301
+DeepLabV3+ + CFENet,Massachusetts,overall,medium,0.3763 ± 0.0152
+DeepLabV3+ + CFENet,Massachusetts,overall,outlier,0.3886 ± 0.0249
+DeepLabV3+ + CFENet,Massachusetts,overall,small,0.2404 ± 0.0046
+DeepLabV3+ + CFENet,Massachusetts,overall,very_large,0.5236 ± 0.0261
+DeepLabV3+ + CFENet,Massachusetts,tyrol-w,large,0.6297 ± 0.0154
+DeepLabV3+ + CFENet,Massachusetts,tyrol-w,medium,0.6539 ± 0.0122
+DeepLabV3+ + CFENet,Massachusetts,tyrol-w,outlier,0.5000 ± 0.2205
+DeepLabV3+ + CFENet,Massachusetts,tyrol-w,small,0.2095 ± 0.0342
+DeepLabV3+ + CFENet,Massachusetts,tyrol-w,very_large,0.4468 ± 0.0319
+DeepLabV3+ + CFENet,Massachusetts,vienna,large,0.7654 ± 0.0008
+DeepLabV3+ + CFENet,Massachusetts,vienna,medium,0.7237 ± 0.0218
+DeepLabV3+ + CFENet,Massachusetts,vienna,outlier,0.3232 ± 0.0537
+DeepLabV3+ + CFENet,Massachusetts,vienna,small,0.2647 ± 0.0279
+DeepLabV3+ + CFENet,Massachusetts,vienna,very_large,0.4531 ± 0.0279
+DeepLabV3+ + CFENet,WHU,Massachusetts,large,0.4752 ± 0.0419
+DeepLabV3+ + CFENet,WHU,Massachusetts,medium,0.4040 ± 0.0500
+DeepLabV3+ + CFENet,WHU,Massachusetts,outlier,0.5741 ± 0.0723
+DeepLabV3+ + CFENet,WHU,Massachusetts,small,0.0702 ± 0.0184
+DeepLabV3+ + CFENet,WHU,Massachusetts,very_large,0.5456 ± 0.0307
+DeepLabV3+ + CFENet,WHU,WHU Test,large,0.9515 ± 0.0038
+DeepLabV3+ + CFENet,WHU,WHU Test,medium,0.9781 ± 0.0032
+DeepLabV3+ + CFENet,WHU,WHU Test,outlier,0.9912 ± 0.0152
+DeepLabV3+ + CFENet,WHU,WHU Test,small,0.8000 ± 0.0194
+DeepLabV3+ + CFENet,WHU,WHU Test,very_large,0.9555 ± 0.0059
+DeepLabV3+ + CFENet,WHU,austin,large,0.7389 ± 0.0205
+DeepLabV3+ + CFENet,WHU,austin,medium,0.6576 ± 0.0241
+DeepLabV3+ + CFENet,WHU,austin,outlier,0.5185 ± 0.2796
+DeepLabV3+ + CFENet,WHU,austin,small,0.3450 ± 0.0084
+DeepLabV3+ + CFENet,WHU,austin,very_large,0.8642 ± 0.0653
+DeepLabV3+ + CFENet,WHU,chicago,large,0.4579 ± 0.0348
+DeepLabV3+ + CFENet,WHU,chicago,medium,0.2481 ± 0.0469
+DeepLabV3+ + CFENet,WHU,chicago,outlier,0.7879 ± 0.1721
+DeepLabV3+ + CFENet,WHU,chicago,small,0.3385 ± 0.0377
+DeepLabV3+ + CFENet,WHU,chicago,very_large,0.5951 ± 0.0572
+DeepLabV3+ + CFENet,WHU,kitsap,large,0.9278 ± 0.0243
+DeepLabV3+ + CFENet,WHU,kitsap,medium,0.6067 ± 0.0121
+DeepLabV3+ + CFENet,WHU,kitsap,outlier,0.0000 ± 0.0000
+DeepLabV3+ + CFENet,WHU,kitsap,small,0.1774 ± 0.0135
+DeepLabV3+ + CFENet,WHU,kitsap,very_large,0.3333 ± 0.0000
+DeepLabV3+ + CFENet,WHU,overall,large,0.6984 ± 0.0258
+DeepLabV3+ + CFENet,WHU,overall,medium,0.4554 ± 0.0218
+DeepLabV3+ + CFENet,WHU,overall,outlier,0.5733 ± 0.1311
+DeepLabV3+ + CFENet,WHU,overall,small,0.3342 ± 0.0180
+DeepLabV3+ + CFENet,WHU,overall,very_large,0.6290 ± 0.0593
+DeepLabV3+ + CFENet,WHU,tyrol-w,large,0.7199 ± 0.0448
+DeepLabV3+ + CFENet,WHU,tyrol-w,medium,0.7721 ± 0.0198
+DeepLabV3+ + CFENet,WHU,tyrol-w,outlier,0.7222 ± 0.0481
+DeepLabV3+ + CFENet,WHU,tyrol-w,small,0.3193 ± 0.0299
+DeepLabV3+ + CFENet,WHU,tyrol-w,very_large,0.4894 ± 0.0384
+DeepLabV3+ + CFENet,WHU,vienna,large,0.7736 ± 0.0270
+DeepLabV3+ + CFENet,WHU,vienna,medium,0.8213 ± 0.0101
+DeepLabV3+ + CFENet,WHU,vienna,outlier,0.5278 ± 0.1304
+DeepLabV3+ + CFENet,WHU,vienna,small,0.3315 ± 0.0036
+DeepLabV3+ + CFENet,WHU,vienna,very_large,0.6332 ± 0.0750
+UNet,Massachusetts,Massachusetts,large,0.7194 ± 0.0223
+UNet,Massachusetts,Massachusetts,medium,0.8656 ± 0.0244
+UNet,Massachusetts,Massachusetts,outlier,0.8222 ± 0.0294
+UNet,Massachusetts,Massachusetts,small,0.4123 ± 0.0136
+UNet,Massachusetts,Massachusetts,very_large,0.7686 ± 0.0188
+UNet,Massachusetts,WHU Test,large,0.8053 ± 0.0323
+UNet,Massachusetts,WHU Test,medium,0.7315 ± 0.0233
+UNet,Massachusetts,WHU Test,outlier,0.9298 ± 0.0152
+UNet,Massachusetts,WHU Test,small,0.4958 ± 0.0383
+UNet,Massachusetts,WHU Test,very_large,0.8516 ± 0.0119
+UNet,Massachusetts,austin,large,0.5830 ± 0.0392
+UNet,Massachusetts,austin,medium,0.4939 ± 0.0522
+UNet,Massachusetts,austin,outlier,0.6296 ± 0.0642
+UNet,Massachusetts,austin,small,0.3374 ± 0.0236
+UNet,Massachusetts,austin,very_large,0.7984 ± 0.0377
+UNet,Massachusetts,chicago,large,0.4528 ± 0.0466
+UNet,Massachusetts,chicago,medium,0.1932 ± 0.0418
+UNet,Massachusetts,chicago,outlier,0.6515 ± 0.0694
+UNet,Massachusetts,chicago,small,0.2208 ± 0.0318
+UNet,Massachusetts,chicago,very_large,0.6290 ± 0.0255
+UNet,Massachusetts,kitsap,large,0.6962 ± 0.0543
+UNet,Massachusetts,kitsap,medium,0.4881 ± 0.0167
+UNet,Massachusetts,kitsap,outlier,0.0000 ± 0.0000
+UNet,Massachusetts,kitsap,small,0.1735 ± 0.0169
+UNet,Massachusetts,kitsap,very_large,0.1667 ± 0.0000
+UNet,Massachusetts,overall,large,0.6159 ± 0.0323
+UNet,Massachusetts,overall,medium,0.3657 ± 0.0342
+UNet,Massachusetts,overall,outlier,0.4629 ± 0.0468
+UNet,Massachusetts,overall,small,0.2642 ± 0.0137
+UNet,Massachusetts,overall,very_large,0.5753 ± 0.0409
+UNet,Massachusetts,tyrol-w,large,0.6679 ± 0.0529
+UNet,Massachusetts,tyrol-w,medium,0.6991 ± 0.0292
+UNet,Massachusetts,tyrol-w,outlier,0.4167 ± 0.1443
+UNet,Massachusetts,tyrol-w,small,0.3149 ± 0.0252
+UNet,Massachusetts,tyrol-w,very_large,0.4504 ± 0.0623
+UNet,Massachusetts,vienna,large,0.7521 ± 0.0159
+UNet,Massachusetts,vienna,medium,0.7227 ± 0.0012
+UNet,Massachusetts,vienna,outlier,0.4242 ± 0.0694
+UNet,Massachusetts,vienna,small,0.2925 ± 0.0204
+UNet,Massachusetts,vienna,very_large,0.5454 ± 0.0540
+UNet,WHU,Massachusetts,large,0.5159 ± 0.0188
+UNet,WHU,Massachusetts,medium,0.3783 ± 0.0274
+UNet,WHU,Massachusetts,outlier,0.5407 ± 0.0651
+UNet,WHU,Massachusetts,small,0.0654 ± 0.0116
+UNet,WHU,Massachusetts,very_large,0.5806 ± 0.0257
+UNet,WHU,WHU Test,large,0.9512 ± 0.0026
+UNet,WHU,WHU Test,medium,0.9762 ± 0.0007
+UNet,WHU,WHU Test,outlier,0.9912 ± 0.0152
+UNet,WHU,WHU Test,small,0.7839 ± 0.0100
+UNet,WHU,WHU Test,very_large,0.9436 ± 0.0030
+UNet,WHU,austin,large,0.7780 ± 0.0063
+UNet,WHU,austin,medium,0.6953 ± 0.0067
+UNet,WHU,austin,outlier,0.6667 ± 0.1925
+UNet,WHU,austin,small,0.3774 ± 0.0053
+UNet,WHU,austin,very_large,0.9136 ± 0.0247
+UNet,WHU,chicago,large,0.4773 ± 0.0104
+UNet,WHU,chicago,medium,0.2217 ± 0.0164
+UNet,WHU,chicago,outlier,0.8485 ± 0.0946
+UNet,WHU,chicago,small,0.2912 ± 0.0322
+UNet,WHU,chicago,very_large,0.6309 ± 0.0331
+UNet,WHU,kitsap,large,0.9442 ± 0.0158
+UNet,WHU,kitsap,medium,0.6283 ± 0.0049
+UNet,WHU,kitsap,outlier,0.0000 ± 0.0000
+UNet,WHU,kitsap,small,0.2086 ± 0.0243
+UNet,WHU,kitsap,very_large,0.5000 ± 0.2887
+UNet,WHU,overall,large,0.7340 ± 0.0041
+UNet,WHU,overall,medium,0.4573 ± 0.0097
+UNet,WHU,overall,outlier,0.6648 ± 0.0476
+UNet,WHU,overall,small,0.3258 ± 0.0157
+UNet,WHU,overall,very_large,0.7014 ± 0.0305
+UNet,WHU,tyrol-w,large,0.7575 ± 0.0254
+UNet,WHU,tyrol-w,medium,0.8192 ± 0.0246
+UNet,WHU,tyrol-w,outlier,0.7778 ± 0.0481
+UNet,WHU,tyrol-w,small,0.3882 ± 0.0302
+UNet,WHU,tyrol-w,very_large,0.4965 ± 0.0268
+UNet,WHU,vienna,large,0.8223 ± 0.0024
+UNet,WHU,vienna,medium,0.8487 ± 0.0081
+UNet,WHU,vienna,outlier,0.6237 ± 0.0358
+UNet,WHU,vienna,small,0.3498 ± 0.0083
+UNet,WHU,vienna,very_large,0.7366 ± 0.0310
+UNet + CFENet,Massachusetts,Massachusetts,large,0.7399 ± 0.0196
+UNet + CFENet,Massachusetts,Massachusetts,medium,0.8904 ± 0.0134
+UNet + CFENet,Massachusetts,Massachusetts,outlier,0.8370 ± 0.0128
+UNet + CFENet,Massachusetts,Massachusetts,small,0.4577 ± 0.0276
+UNet + CFENet,Massachusetts,Massachusetts,very_large,0.7935 ± 0.0251
+UNet + CFENet,Massachusetts,WHU Test,large,0.7818 ± 0.0091
+UNet + CFENet,Massachusetts,WHU Test,medium,0.6902 ± 0.0308
+UNet + CFENet,Massachusetts,WHU Test,outlier,0.8509 ± 0.0760
+UNet + CFENet,Massachusetts,WHU Test,small,0.4361 ± 0.0298
+UNet + CFENet,Massachusetts,WHU Test,very_large,0.8220 ± 0.0388
+UNet + CFENet,Massachusetts,austin,large,0.5020 ± 0.0415
+UNet + CFENet,Massachusetts,austin,medium,0.4086 ± 0.0402
+UNet + CFENet,Massachusetts,austin,outlier,0.2963 ± 0.1697
+UNet + CFENet,Massachusetts,austin,small,0.2471 ± 0.0039
+UNet + CFENet,Massachusetts,austin,very_large,0.7037 ± 0.0864
+UNet + CFENet,Massachusetts,chicago,large,0.4941 ± 0.0850
+UNet + CFENet,Massachusetts,chicago,medium,0.2354 ± 0.0717
+UNet + CFENet,Massachusetts,chicago,outlier,0.5909 ± 0.1203
+UNet + CFENet,Massachusetts,chicago,small,0.2078 ± 0.0527
+UNet + CFENet,Massachusetts,chicago,very_large,0.6215 ± 0.0370
+UNet + CFENet,Massachusetts,kitsap,large,0.4943 ± 0.1181
+UNet + CFENet,Massachusetts,kitsap,medium,0.3636 ± 0.0637
+UNet + CFENet,Massachusetts,kitsap,outlier,0.0000 ± 0.0000
+UNet + CFENet,Massachusetts,kitsap,small,0.1267 ± 0.0147
+UNet + CFENet,Massachusetts,kitsap,very_large,0.1111 ± 0.0962
+UNet + CFENet,Massachusetts,overall,large,0.5561 ± 0.0214
+UNet + CFENet,Massachusetts,overall,medium,0.3423 ± 0.0395
+UNet + CFENet,Massachusetts,overall,outlier,0.3676 ± 0.0528
+UNet + CFENet,Massachusetts,overall,small,0.2162 ± 0.0214
+UNet + CFENet,Massachusetts,overall,very_large,0.5141 ± 0.0181
+UNet + CFENet,Massachusetts,tyrol-w,large,0.5771 ± 0.0308
+UNet + CFENet,Massachusetts,tyrol-w,medium,0.5661 ± 0.0395
+UNet + CFENet,Massachusetts,tyrol-w,outlier,0.4167 ± 0.0833
+UNet + CFENet,Massachusetts,tyrol-w,small,0.1414 ± 0.0394
+UNet + CFENet,Massachusetts,tyrol-w,very_large,0.4149 ± 0.0184
+UNet + CFENet,Massachusetts,vienna,large,0.6956 ± 0.0165
+UNet + CFENet,Massachusetts,vienna,medium,0.6111 ± 0.0348
+UNet + CFENet,Massachusetts,vienna,outlier,0.3308 ± 0.0358
+UNet + CFENet,Massachusetts,vienna,small,0.2358 ± 0.0239
+UNet + CFENet,Massachusetts,vienna,very_large,0.4635 ± 0.0291
+UNet + CFENet,WHU,Massachusetts,large,0.4845 ± 0.0121
+UNet + CFENet,WHU,Massachusetts,medium,0.3927 ± 0.0247
+UNet + CFENet,WHU,Massachusetts,outlier,0.5481 ± 0.0463
+UNet + CFENet,WHU,Massachusetts,small,0.0648 ± 0.0089
+UNet + CFENet,WHU,Massachusetts,very_large,0.5762 ± 0.0163
+UNet + CFENet,WHU,WHU Test,large,0.9569 ± 0.0020
+UNet + CFENet,WHU,WHU Test,medium,0.9787 ± 0.0005
+UNet + CFENet,WHU,WHU Test,outlier,1.0000 ± 0.0000
+UNet + CFENet,WHU,WHU Test,small,0.8011 ± 0.0066
+UNet + CFENet,WHU,WHU Test,very_large,0.9585 ± 0.0051
+UNet + CFENet,WHU,austin,large,0.7646 ± 0.0228
+UNet + CFENet,WHU,austin,medium,0.6882 ± 0.0112
+UNet + CFENet,WHU,austin,outlier,0.5185 ± 0.0642
+UNet + CFENet,WHU,austin,small,0.3599 ± 0.0087
+UNet + CFENet,WHU,austin,very_large,0.9136 ± 0.0445
+UNet + CFENet,WHU,chicago,large,0.4523 ± 0.0208
+UNet + CFENet,WHU,chicago,medium,0.2275 ± 0.0420
+UNet + CFENet,WHU,chicago,outlier,0.9091 ± 0.0455
+UNet + CFENet,WHU,chicago,small,0.3028 ± 0.0409
+UNet + CFENet,WHU,chicago,very_large,0.6158 ± 0.0370
+UNet + CFENet,WHU,kitsap,large,0.9360 ± 0.0148
+UNet + CFENet,WHU,kitsap,medium,0.6167 ± 0.0031
+UNet + CFENet,WHU,kitsap,outlier,0.0000 ± 0.0000
+UNet + CFENet,WHU,kitsap,small,0.2086 ± 0.0188
+UNet + CFENet,WHU,kitsap,very_large,0.3889 ± 0.0962
+UNet + CFENet,WHU,overall,large,0.7209 ± 0.0127
+UNet + CFENet,WHU,overall,medium,0.4581 ± 0.0264
+UNet + CFENet,WHU,overall,outlier,0.6438 ± 0.0315
+UNet + CFENet,WHU,overall,small,0.3260 ± 0.0221
+UNet + CFENet,WHU,overall,very_large,0.6745 ± 0.0107
+UNet + CFENet,WHU,tyrol-w,large,0.7613 ± 0.0231
+UNet + CFENet,WHU,tyrol-w,medium,0.8215 ± 0.0234
+UNet + CFENet,WHU,tyrol-w,outlier,0.7500 ± 0.0833
+UNet + CFENet,WHU,tyrol-w,small,0.3711 ± 0.0270
+UNet + CFENet,WHU,tyrol-w,very_large,0.5248 ± 0.0163
+UNet + CFENet,WHU,vienna,large,0.8067 ± 0.0035
+UNet + CFENet,WHU,vienna,medium,0.8460 ± 0.0026
+UNet + CFENet,WHU,vienna,outlier,0.5985 ± 0.0273
+UNet + CFENet,WHU,vienna,small,0.3438 ± 0.0024
+UNet + CFENet,WHU,vienna,very_large,0.6897 ± 0.0213
+UPerNet,Massachusetts,Massachusetts,large,0.7438 ± 0.0198
+UPerNet,Massachusetts,Massachusetts,medium,0.8961 ± 0.0093
+UPerNet,Massachusetts,Massachusetts,outlier,0.8037 ± 0.0339
+UPerNet,Massachusetts,Massachusetts,small,0.4690 ± 0.0186
+UPerNet,Massachusetts,Massachusetts,very_large,0.7750 ± 0.0173
+UPerNet,Massachusetts,WHU Test,large,0.7997 ± 0.0074
+UPerNet,Massachusetts,WHU Test,medium,0.7373 ± 0.0074
+UPerNet,Massachusetts,WHU Test,outlier,0.8947 ± 0.0526
+UPerNet,Massachusetts,WHU Test,small,0.4678 ± 0.0026
+UPerNet,Massachusetts,WHU Test,very_large,0.8526 ± 0.0062
+UPerNet,Massachusetts,austin,large,0.5981 ± 0.0451
+UPerNet,Massachusetts,austin,medium,0.4855 ± 0.0447
+UPerNet,Massachusetts,austin,outlier,0.4815 ± 0.0642
+UPerNet,Massachusetts,austin,small,0.3234 ± 0.0258
+UPerNet,Massachusetts,austin,very_large,0.8272 ± 0.0494
+UPerNet,Massachusetts,chicago,large,0.4461 ± 0.0161
+UPerNet,Massachusetts,chicago,medium,0.1965 ± 0.0104
+UPerNet,Massachusetts,chicago,outlier,0.7576 ± 0.0262
+UPerNet,Massachusetts,chicago,small,0.2116 ± 0.0255
+UPerNet,Massachusetts,chicago,very_large,0.5951 ± 0.0086
+UPerNet,Massachusetts,kitsap,large,0.6650 ± 0.1231
+UPerNet,Massachusetts,kitsap,medium,0.4619 ± 0.0849
+UPerNet,Massachusetts,kitsap,outlier,0.0000 ± 0.0000
+UPerNet,Massachusetts,kitsap,small,0.1618 ± 0.0504
+UPerNet,Massachusetts,kitsap,very_large,0.1667 ± 0.0000
+UPerNet,Massachusetts,overall,large,0.6148 ± 0.0331
+UPerNet,Massachusetts,overall,medium,0.3639 ± 0.0203
+UPerNet,Massachusetts,overall,outlier,0.4190 ± 0.0372
+UPerNet,Massachusetts,overall,small,0.2566 ± 0.0243
+UPerNet,Massachusetts,overall,very_large,0.5438 ± 0.0306
+UPerNet,Massachusetts,tyrol-w,large,0.6924 ± 0.0043
+UPerNet,Massachusetts,tyrol-w,medium,0.7077 ± 0.0077
+UPerNet,Massachusetts,tyrol-w,outlier,0.4722 ± 0.1273
+UPerNet,Massachusetts,tyrol-w,small,0.2714 ± 0.0234
+UPerNet,Massachusetts,tyrol-w,very_large,0.5177 ± 0.0325
+UPerNet,Massachusetts,vienna,large,0.7208 ± 0.0656
+UPerNet,Massachusetts,vienna,medium,0.7087 ± 0.0450
+UPerNet,Massachusetts,vienna,outlier,0.3535 ± 0.0358
+UPerNet,Massachusetts,vienna,small,0.3010 ± 0.0239
+UPerNet,Massachusetts,vienna,very_large,0.4829 ± 0.0524
+UPerNet,WHU,Massachusetts,large,0.5012 ± 0.0266
+UPerNet,WHU,Massachusetts,medium,0.4455 ± 0.0158
+UPerNet,WHU,Massachusetts,outlier,0.5778 ± 0.0111
+UPerNet,WHU,Massachusetts,small,0.0918 ± 0.0071
+UPerNet,WHU,Massachusetts,very_large,0.5736 ± 0.0088
+UPerNet,WHU,WHU Test,large,0.9557 ± 0.0023
+UPerNet,WHU,WHU Test,medium,0.9778 ± 0.0005
+UPerNet,WHU,WHU Test,outlier,0.9912 ± 0.0152
+UPerNet,WHU,WHU Test,small,0.7976 ± 0.0054
+UPerNet,WHU,WHU Test,very_large,0.9585 ± 0.0030
+UPerNet,WHU,austin,large,0.7680 ± 0.0137
+UPerNet,WHU,austin,medium,0.6907 ± 0.0100
+UPerNet,WHU,austin,outlier,0.6296 ± 0.0642
+UPerNet,WHU,austin,small,0.3925 ± 0.0261
+UPerNet,WHU,austin,very_large,0.9136 ± 0.0370
+UPerNet,WHU,chicago,large,0.4487 ± 0.0070
+UPerNet,WHU,chicago,medium,0.2187 ± 0.0131
+UPerNet,WHU,chicago,outlier,0.8788 ± 0.0262
+UPerNet,WHU,chicago,small,0.3159 ± 0.0231
+UPerNet,WHU,chicago,very_large,0.6234 ± 0.0182
+UPerNet,WHU,kitsap,large,0.9507 ± 0.0049
+UPerNet,WHU,kitsap,medium,0.6324 ± 0.0084
+UPerNet,WHU,kitsap,outlier,0.0000 ± 0.0000
+UPerNet,WHU,kitsap,small,0.2008 ± 0.0236
+UPerNet,WHU,kitsap,very_large,0.7778 ± 0.0962
+UPerNet,WHU,overall,large,0.7231 ± 0.0094
+UPerNet,WHU,overall,medium,0.4550 ± 0.0082
+UPerNet,WHU,overall,outlier,0.6781 ± 0.0066
+UPerNet,WHU,overall,small,0.3395 ± 0.0134
+UPerNet,WHU,overall,very_large,0.6878 ± 0.0083
+UPerNet,WHU,tyrol-w,large,0.7607 ± 0.0133
+UPerNet,WHU,tyrol-w,medium,0.8272 ± 0.0027
+UPerNet,WHU,tyrol-w,outlier,0.6944 ± 0.1273
+UPerNet,WHU,tyrol-w,small,0.4027 ± 0.0301
+UPerNet,WHU,tyrol-w,very_large,0.5461 ± 0.0246
+UPerNet,WHU,vienna,large,0.8108 ± 0.0243
+UPerNet,WHU,vienna,medium,0.8446 ± 0.0124
+UPerNet,WHU,vienna,outlier,0.6465 ± 0.0158
+UPerNet,WHU,vienna,small,0.3429 ± 0.0053
+UPerNet,WHU,vienna,very_large,0.7009 ± 0.0080
+UPerNet + CFENet,Massachusetts,Massachusetts,large,0.7570 ± 0.0213
+UPerNet + CFENet,Massachusetts,Massachusetts,medium,0.9055 ± 0.0135
+UPerNet + CFENet,Massachusetts,Massachusetts,outlier,0.8074 ± 0.0390
+UPerNet + CFENet,Massachusetts,Massachusetts,small,0.4773 ± 0.0245
+UPerNet + CFENet,Massachusetts,Massachusetts,very_large,0.7992 ± 0.0253
+UPerNet + CFENet,Massachusetts,WHU Test,large,0.8460 ± 0.0026
+UPerNet + CFENet,Massachusetts,WHU Test,medium,0.7991 ± 0.0163
+UPerNet + CFENet,Massachusetts,WHU Test,outlier,0.8070 ± 0.0304
+UPerNet + CFENet,Massachusetts,WHU Test,small,0.5089 ± 0.0284
+UPerNet + CFENet,Massachusetts,WHU Test,very_large,0.8309 ± 0.0431
+UPerNet + CFENet,Massachusetts,austin,large,0.5766 ± 0.0569
+UPerNet + CFENet,Massachusetts,austin,medium,0.5025 ± 0.0612
+UPerNet + CFENet,Massachusetts,austin,outlier,0.4074 ± 0.1283
+UPerNet + CFENet,Massachusetts,austin,small,0.3210 ± 0.0248
+UPerNet + CFENet,Massachusetts,austin,very_large,0.7654 ± 0.0327
+UPerNet + CFENet,Massachusetts,chicago,large,0.5380 ± 0.0009
+UPerNet + CFENet,Massachusetts,chicago,medium,0.2953 ± 0.0231
+UPerNet + CFENet,Massachusetts,chicago,outlier,0.6364 ± 0.0787
+UPerNet + CFENet,Massachusetts,chicago,small,0.2634 ± 0.0159
+UPerNet + CFENet,Massachusetts,chicago,very_large,0.6234 ± 0.0142
+UPerNet + CFENet,Massachusetts,kitsap,large,0.6388 ± 0.0816
+UPerNet + CFENet,Massachusetts,kitsap,medium,0.4251 ± 0.0269
+UPerNet + CFENet,Massachusetts,kitsap,outlier,0.0000 ± 0.0000
+UPerNet + CFENet,Massachusetts,kitsap,small,0.1326 ± 0.0288
+UPerNet + CFENet,Massachusetts,kitsap,very_large,0.1667 ± 0.0000
+UPerNet + CFENet,Massachusetts,overall,large,0.6226 ± 0.0259
+UPerNet + CFENet,Massachusetts,overall,medium,0.4182 ± 0.0126
+UPerNet + CFENet,Massachusetts,overall,outlier,0.4343 ± 0.0618
+UPerNet + CFENet,Massachusetts,overall,small,0.2682 ± 0.0080
+UPerNet + CFENet,Massachusetts,overall,very_large,0.5451 ± 0.0399
+UPerNet + CFENet,Massachusetts,tyrol-w,large,0.6504 ± 0.0370
+UPerNet + CFENet,Massachusetts,tyrol-w,medium,0.6768 ± 0.0144
+UPerNet + CFENet,Massachusetts,tyrol-w,outlier,0.4444 ± 0.0481
+UPerNet + CFENet,Massachusetts,tyrol-w,small,0.1937 ± 0.0152
+UPerNet + CFENet,Massachusetts,tyrol-w,very_large,0.5035 ± 0.0123
+UPerNet + CFENet,Massachusetts,vienna,large,0.7433 ± 0.0143
+UPerNet + CFENet,Massachusetts,vienna,medium,0.7113 ± 0.0287
+UPerNet + CFENet,Massachusetts,vienna,outlier,0.4015 ± 0.0833
+UPerNet + CFENet,Massachusetts,vienna,small,0.2698 ± 0.0082
+UPerNet + CFENet,Massachusetts,vienna,very_large,0.4881 ± 0.0692
+UPerNet + CFENet,WHU,Massachusetts,large,0.5178 ± 0.0291
+UPerNet + CFENet,WHU,Massachusetts,medium,0.4280 ± 0.0308
+UPerNet + CFENet,WHU,Massachusetts,outlier,0.5704 ± 0.0321
+UPerNet + CFENet,WHU,Massachusetts,small,0.0767 ± 0.0145
+UPerNet + CFENet,WHU,Massachusetts,very_large,0.5762 ± 0.0579
+UPerNet + CFENet,WHU,WHU Test,large,0.9572 ± 0.0034
+UPerNet + CFENet,WHU,WHU Test,medium,0.9793 ± 0.0019
+UPerNet + CFENet,WHU,WHU Test,outlier,1.0000 ± 0.0000
+UPerNet + CFENet,WHU,WHU Test,small,0.8119 ± 0.0029
+UPerNet + CFENet,WHU,WHU Test,very_large,0.9505 ± 0.0104
+UPerNet + CFENet,WHU,austin,large,0.7589 ± 0.0138
+UPerNet + CFENet,WHU,austin,medium,0.6794 ± 0.0079
+UPerNet + CFENet,WHU,austin,outlier,0.4074 ± 0.1697
+UPerNet + CFENet,WHU,austin,small,0.3656 ± 0.0146
+UPerNet + CFENet,WHU,austin,very_large,0.8848 ± 0.0583
+UPerNet + CFENet,WHU,chicago,large,0.4819 ± 0.0434
+UPerNet + CFENet,WHU,chicago,medium,0.2435 ± 0.0469
+UPerNet + CFENet,WHU,chicago,outlier,0.7424 ± 0.0694
+UPerNet + CFENet,WHU,chicago,small,0.3656 ± 0.0253
+UPerNet + CFENet,WHU,chicago,very_large,0.6196 ± 0.0118
+UPerNet + CFENet,WHU,kitsap,large,0.9376 ± 0.0173
+UPerNet + CFENet,WHU,kitsap,medium,0.6203 ± 0.0084
+UPerNet + CFENet,WHU,kitsap,outlier,0.0000 ± 0.0000
+UPerNet + CFENet,WHU,kitsap,small,0.2203 ± 0.0179
+UPerNet + CFENet,WHU,kitsap,very_large,0.3333 ± 0.0000
+UPerNet + CFENet,WHU,overall,large,0.7226 ± 0.0116
+UPerNet + CFENet,WHU,overall,medium,0.4642 ± 0.0263
+UPerNet + CFENet,WHU,overall,outlier,0.6229 ± 0.0941
+UPerNet + CFENet,WHU,overall,small,0.3628 ± 0.0139
+UPerNet + CFENet,WHU,overall,very_large,0.6576 ± 0.0374
+UPerNet + CFENet,WHU,tyrol-w,large,0.7525 ± 0.0104
+UPerNet + CFENet,WHU,tyrol-w,medium,0.8137 ± 0.0120
+UPerNet + CFENet,WHU,tyrol-w,outlier,0.7222 ± 0.1735
+UPerNet + CFENet,WHU,tyrol-w,small,0.4181 ± 0.0040
+UPerNet + CFENet,WHU,tyrol-w,very_large,0.5248 ± 0.0443
+UPerNet + CFENet,WHU,vienna,large,0.8021 ± 0.0167
+UPerNet + CFENet,WHU,vienna,medium,0.8458 ± 0.0043
+UPerNet + CFENet,WHU,vienna,outlier,0.6086 ± 0.0977
+UPerNet + CFENet,WHU,vienna,small,0.3499 ± 0.0049
+UPerNet + CFENet,WHU,vienna,very_large,0.6637 ± 0.0481
