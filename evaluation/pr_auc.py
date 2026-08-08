@@ -57,7 +57,7 @@ def store_pr_auc(config_name, thresholds, tp, fp, fn, dest_dir):
     return optimal_threshold
 
 
-def main(params):
+def main(params=None):
     if params is None:
         parser = argparse.ArgumentParser(description="Compute and store PR-AUC data.")
         parser.add_argument("--h5_path", type=str, required=True, help="Path to the HDF5 dataset.")
