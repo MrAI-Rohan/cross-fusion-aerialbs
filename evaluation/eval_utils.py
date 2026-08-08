@@ -108,7 +108,7 @@ def extract_instances(mask: torch.Tensor):
     return labels, bbox, area, centroid
 
 def make_predictions_and_count(loader, model, h5_path, patch_size, instance_h5_path=None, 
-                               gsd=None, threshold=0.5, compute_pr_auc=False,):
+                               gsd=None, threshold=0.5, compute_pr_auc=False, instance_list=None):
     # I should group counts in dictionaries to improve readability if pipeline grows.
 
     if not compute_pr_auc and (gsd is None or instance_h5_path is None):
@@ -145,11 +145,15 @@ def make_predictions_and_count(loader, model, h5_path, patch_size, instance_h5_p
 
         # Load instances in RAM
         if not compute_pr_auc:
-            with h5py.File(instance_h5_path, 'r') as instance_f:
-                assert len(masks) == instance_f["labels"].shape[0], (
-                        f"{len(masks)} doesn't match {instance_f["labels"].shape[0]}"
-                )
-                gt_instances = [get_gt_instance_meta(i, instance_f) for i in range(len(masks))]
+            if instance_list is None:
+                with h5py.File(instance_h5_path, 'r') as instance_f:
+                    assert len(masks) == instance_f["labels"].shape[0], (
+                            f"{len(masks)} doesn't match {instance_f["labels"].shape[0]}"
+                    )
+                    gt_instances = [get_gt_instance_meta(i, instance_f) for i in range(len(masks))]
+            elif instance_list is not None:
+                gt_instances = instance_list # To support fast city-wise instance metrics.
+
             
         with torch.inference_mode():
             for batch in tqdm(loader, desc="Predicting patches", unit="batch", total=len(loader)):
