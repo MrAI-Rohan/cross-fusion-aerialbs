@@ -152,8 +152,10 @@ def make_predictions_and_count(loader, model, h5_path, patch_size, instance_h5_p
                     )
                     gt_instances = [get_gt_instance_meta(i, instance_f) for i in range(len(masks))]
             elif instance_list is not None:
+                assert len(masks) == len(instance_list), (
+                        f"{len(masks)} doesn't match {len(instance_list)}"
+                )
                 gt_instances = instance_list # To support fast city-wise instance metrics.
-
             
         with torch.inference_mode():
             for batch in tqdm(loader, desc="Predicting patches", unit="batch", total=len(loader)):
