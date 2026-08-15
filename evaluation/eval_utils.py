@@ -3,6 +3,7 @@ import cv2
 import h5py
 import time
 import numpy as np
+from pathlib import Path
 from tqdm.auto import tqdm
 
 import torch
@@ -108,7 +109,8 @@ def extract_instances(mask: torch.Tensor):
     return labels, bbox, area, centroid
 
 def make_predictions_and_count(loader, model, h5_path, patch_size, instance_h5_path=None, 
-                               gsd=None, threshold=0.5, compute_pr_auc=False, instance_list=None):
+                               gsd=None, threshold=0.5, compute_pr_auc=False, instance_list=None,
+                               save_dir=None):
     # I should group counts in dictionaries to improve readability if pipeline grows.
 
     if not compute_pr_auc and (gsd is None or (instance_h5_path is None and instance_list is None)):
@@ -192,6 +194,11 @@ def make_predictions_and_count(loader, model, h5_path, patch_size, instance_h5_p
                             update_pr_auc_counts(avg, gt, thresholds, tp_auc, fp_auc, fn_auc)
                         else:
                             pred_mask = (avg >= threshold)
+
+                            if save_dir is not None:
+                                save_dir = Path(save_dir)
+                                save_dir.mkdir(parents=True, exist_ok=True)
+                                np.save(save_dir / f"img_{current_img:04d}_mask.npy", pred_mask.numpy())
 
                             tp += ((pred_mask == 1) & (gt == 1)).sum().item()
                             fp += ((pred_mask == 1) & (gt == 0)).sum().item()
