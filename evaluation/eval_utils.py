@@ -109,8 +109,8 @@ def extract_instances(mask: torch.Tensor):
     return labels, bbox, area, centroid
 
 def make_predictions_and_count(loader, model, h5_path, patch_size, instance_h5_path=None, 
-                               gsd=None, threshold=0.5, compute_pr_auc=False, instance_list=None,
-                               save_dir=None):
+                               gsd=None, threshold=0.5, compute_pr_auc=False, compute_cka=False,
+                               instance_list=None, save_dir=None):
     # I should group counts in dictionaries to improve readability if pipeline grows.
 
     if not compute_pr_auc and (gsd is None or (instance_h5_path is None and instance_list is None)):
@@ -133,6 +133,18 @@ def make_predictions_and_count(loader, model, h5_path, patch_size, instance_h5_p
         tp_auc = torch.zeros(101, dtype=torch.int64)
         fp_auc = torch.zeros(101, dtype=torch.int64)
         fn_auc = torch.zeros(101, dtype=torch.int64)
+
+    if compute_cka:
+        cka_keys = []
+        cka_vecs = [[] for _ in range(4)]  # e1..e4
+        _batch_stage_pooled = {}
+
+        def _encoder_hook(module, input, output):
+            # output: list of 4 NHWC tensors from Swin encoder
+            for stage_i, feat in enumerate(output):
+                _batch_stage_pooled[stage_i] = feat.mean(dim=(1, 2)).detach().cpu().numpy()
+
+        hook_handle = model.model.encoder.register_forward_hook(_encoder_hook)
 
     current_img = None
     full_pred = None
@@ -178,6 +190,13 @@ def make_predictions_and_count(loader, model, h5_path, patch_size, instance_h5_p
                 preds = preds.cpu()
 
                 t2 = time.time()
+
+                if compute_cka:
+                    for i in range(images.shape[0]):
+                        cka_keys.append((img_idx[i].item(), y[i].item(), x[i].item()))
+                        for stage_i in range(4):
+                            cka_vecs[stage_i].append(_batch_stage_pooled[stage_i][i])
+
                 for i in range(preds.shape[0]):
                     img = img_idx[i].item()
                     yi = y[i].item()
@@ -284,8 +303,16 @@ def make_predictions_and_count(loader, model, h5_path, patch_size, instance_h5_p
     gc.collect()
     print(f"Loading time: {loader_time:.2f}s, Inference time: {infer_time:.2f}s, Stitching time: {stitch_time:.2f}s")
 
+    if compute_cka:
+        hook_handle.remove()
+
     if compute_pr_auc:
-        return {"tp": tp_auc, "fp": fp_auc, "fn": fn_auc, "thresholds": thresholds}
+        result = {"tp": tp_auc, "fp": fp_auc, "fn": fn_auc, "thresholds": thresholds}
+        if compute_cka:
+            result["cka_keys"] = np.array(cka_keys)
+            result["cka_activations"] = [np.stack(v) for v in cka_vecs]  # 4 arrays, (n_patches, channels)
+        return result
+        
 
     results =  {
         "confusion_matrix": {"tp": tp, "fp": fp, "fn": fn, "tn": tn},
@@ -297,5 +324,9 @@ def make_predictions_and_count(loader, model, h5_path, patch_size, instance_h5_p
             "seg_error": instance_metrics05.get_segmentation_error()
         }
     }
+
+    if compute_cka:
+        results["cka_keys"] = np.array(cka_keys)
+        results["cka_activations"] = [np.stack(v) for v in cka_vecs]
 
     return results
