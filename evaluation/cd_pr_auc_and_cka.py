@@ -69,5 +69,7 @@ if __name__ == "__main__":
     parser.add_argument("--ckpt_path", type=str, required=True)
     parser.add_argument("--h5_root", type=str, required=True)
     parser.add_argument("--dest_dir", type=str, default="pr_auc_cross_domain")
+    parser.add_argument("--batch_size", type=int, default=256)
     args = parser.parse_args()
-    compute_cross_domain_pr_auc_and_cka(args.ckpt_path, args.h5_root, dest_dir=args.dest_dir)
+    compute_cross_domain_pr_auc_and_cka(args.ckpt_path, args.h5_root,
+                                        batch_size=args.batch_size, dest_dir=args.dest_dir)
