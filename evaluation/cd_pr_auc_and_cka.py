@@ -5,7 +5,7 @@ from pathlib import Path
 
 from evaluation.eval_utils import load_data, load_model, build_eval_transform, make_predictions_and_count
 from evaluation.pr_auc import store_pr_auc
-from benchmark import get_inria_city_indices
+from evaluation.benchmark import get_inria_city_indices
 
 def compute_cross_domain_pr_auc_and_cka(ckpt_path, h5_root, patch_size=224, batch_size=256,
                                          stride=112, dest_dir="pr_auc_cross_domain"):
