@@ -37,7 +37,10 @@ def update_pr_auc_counts(pred_mask, gt_mask, thresholds, tp, fp, fn,):
     # Flatten to 1D (P = H * W)
     pred_flat = pred_mask.flatten()
     gt_flat = gt_mask.flatten().bool()
-    
+
+    """
+    Vectorized addition for WHU and Massachusetts. 
+
     # thresholds[:, None] -> shape (T, 1)
     # pred_flat[None, :]  -> shape (1, P)
     # Result: (T, P) boolean matrix where row t is (prob >= threshold[t])
@@ -50,6 +53,16 @@ def update_pr_auc_counts(pred_mask, gt_mask, thresholds, tp, fp, fn,):
     tp += torch.sum(pred_binary & gt_binary, axis=1)
     fp += torch.sum(pred_binary & ~gt_binary, axis=1)
     fn += torch.sum(~pred_binary & gt_binary, axis=1)
+    """
+
+    # interative solution for INRIA
+    # I should add an if condition later
+
+    for i, t in enumerate(thresholds):
+        pred_binary = pred_flat >= t          # shape (P,), not (101, P)
+        tp[i] += torch.sum(pred_binary & gt_flat)
+        fp[i] += torch.sum(pred_binary & ~gt_flat)
+        fn[i] += torch.sum(~pred_binary & gt_flat)
 
 def mask_to_boundary(mask, dilation_ratio = 0.02):
     # Convert a binary torch mask to its boundary mask.
