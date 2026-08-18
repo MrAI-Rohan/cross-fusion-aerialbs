@@ -5,10 +5,9 @@ import numpy as np
 from pathlib import Path
 from collections import defaultdict
 
-from evaluation.eval_utils import load_model  # reuse the proven-working loader,
-                                                # not a raw torch.load() that would
-                                                # likely hit the same weights_only
-                                                # error already debugged earlier
+from evaluation.eval_utils import load_model
+
+# Comment to push properly
 
 STAGE_MAP = {"layers_0": "e1", "layers_1": "e2", "layers_2": "e3", "layers_3": "e4"}
 
