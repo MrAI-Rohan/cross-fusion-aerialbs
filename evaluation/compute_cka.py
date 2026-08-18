@@ -10,25 +10,37 @@ def linear_cka(X, Y):
     norm_y = np.linalg.norm(Y.T @ Y, ord='fro')
     return cross / (norm_x * norm_y)
 
-def compare_checkpoints(base_npz_path, cfe_npz_path):
-    base = np.load(base_npz_path)
-    cfe = np.load(cfe_npz_path)
+def subsample_nonoverlapping(keys, patch_size=224):
+    """Keep only patches whose (y, x) land exactly on a non-overlapping patch_size grid"""
+    mask = []
+    for k in keys:
+        *_, y, x = k  # works whether key is (img,y,x) or (city,img,y,x)
+        mask.append((y % patch_size == 0) and (x % patch_size == 0))
+    return mask
 
-    # align by patch key, in case ordering differs between runs
+def compare_checkpoints(base_npz_path, cfe_npz_path, patch_size=224):
+    base = np.load(base_npz_path, allow_pickle=True)
+    cfe  = np.load(cfe_npz_path,  allow_pickle=True)
+
     base_keys = {tuple(k): i for i, k in enumerate(base["keys"])}
-    cfe_keys = {tuple(k): i for i, k in enumerate(cfe["keys"])}
-    shared = sorted(set(base_keys) & set(cfe_keys))
-    print(f"{len(shared)} matched patches "
-          f"(base had {len(base_keys)}, cfe had {len(cfe_keys)})")
+    cfe_keys  = {tuple(k): i for i, k in enumerate(cfe["keys"])}
+    shared_all = sorted(set(base_keys) & set(cfe_keys))
+
+    nonoverlap_mask = subsample_nonoverlapping(shared_all, patch_size)
+    shared = [k for k, keep in zip(shared_all, nonoverlap_mask) if keep]
+
+    print(f"{len(shared)} non-overlapping patches used (of {len(shared_all)} total overlapping)")
+    # sanity check: should land near total/4, given 50% overlap in both dims
 
     base_idx = [base_keys[k] for k in shared]
-    cfe_idx = [cfe_keys[k] for k in shared]
+    cfe_idx  = [cfe_keys[k] for k in shared]
 
+    results = {}
     for stage in ["e1", "e2", "e3", "e4"]:
-        X = base[stage][base_idx]
-        Y = cfe[stage][cfe_idx]
-        cka = linear_cka(X, Y)
-        print(f"{stage}: CKA = {cka:.4f}")
+        X, Y = base[stage][base_idx], cfe[stage][cfe_idx]
+        results[stage] = linear_cka(X, Y)
+        print(f"  {stage}: CKA = {results[stage]:.4f}")
+    return results
 
 if __name__ == "__main__":
     import argparse
