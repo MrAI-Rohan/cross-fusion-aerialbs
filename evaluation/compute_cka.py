@@ -44,8 +44,28 @@ def compare_checkpoints(base_npz_path, cfe_npz_path, patch_size=224):
 
 if __name__ == "__main__":
     import argparse
+    import os
+    import json
+
     parser = argparse.ArgumentParser()
+
     parser.add_argument("--base_npz", type=str, required=True)
     parser.add_argument("--cfe_npz", type=str, required=True)
+    parser.add_argument("--dest_dir", type=str, required=True)
+    parser.add_argument("--save_filename", type=str, required=True)
+
     args = parser.parse_args()
-    compare_checkpoints(args.base_npz, args.cfe_npz)
+
+    results = compare_checkpoints(
+        args.base_npz,
+        args.cfe_npz
+    )
+
+    os.makedirs(args.dest_dir, exist_ok=True)
+
+    save_path = os.path.join(args.dest_dir, args.save_filename)
+
+    with open(save_path, "w") as f:
+        json.dump(results, f, indent=4)
+
+    print(f"Results saved to: {save_path}")
