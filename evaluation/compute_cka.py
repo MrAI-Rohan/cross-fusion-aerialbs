@@ -38,7 +38,7 @@ def compare_checkpoints(base_npz_path, cfe_npz_path, patch_size=224):
     results = {}
     for stage in ["e1", "e2", "e3", "e4"]:
         X, Y = base[stage][base_idx], cfe[stage][cfe_idx]
-        results[stage] = linear_cka(X, Y)
+        results[stage] = float(linear_cka(X, Y))
         print(f"  {stage}: CKA = {results[stage]:.4f}")
     return results
 
